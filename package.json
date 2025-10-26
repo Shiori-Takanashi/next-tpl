@@ -6,7 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "docker:dev": "docker-compose up next-tpl-dev",
+    "docker:build": "docker build -t next-tpl .",
+    "docker:run": "docker run -p 3000:3000 next-tpl"
+  },
+  "engines": {
+    "node": "22.11.0",
+    "npm": ">=10.0.0"
   },
   "dependencies": {
     "react": "19.2.0",
