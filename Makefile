@@ -1,6 +1,6 @@
 # Next.js学習テンプレート Makefile
 
-.PHONY: help setup dev dev-docker build build-docker clean clean-docker test lint
+.PHONY: help setup dev dev-docker build build-docker clean clean-docker cleanup cleanup-dry test lint
 
 # デフォルトターゲット
 help:
@@ -21,6 +21,8 @@ help:
 	@echo "🧹 クリーンアップ:"
 	@echo "  make clean      - ローカル環境クリーンアップ"
 	@echo "  make clean-docker - Docker環境クリーンアップ"
+	@echo "  make cleanup    - 高度なファイルクリーンアップ"
+	@echo "  make cleanup-dry - クリーンアップ対象ファイル表示"
 	@echo ""
 	@echo "✅ チェック:"
 	@echo "  make lint       - ESLintチェック"
@@ -28,7 +30,7 @@ help:
 
 # セットアップ
 setup:
-	@./setup.sh
+	@./setup
 
 install:
 	@echo "📦 依存関係をインストールします..."
@@ -74,6 +76,15 @@ clean-docker:
 	docker-compose down
 	docker system prune -f
 	@echo "✅ Dockerクリーンアップ完了"
+
+# 高度なクリーンアップ
+cleanup:
+	@echo "🧹 高度なファイルクリーンアップを実行します..."
+	./tools/cleanup.zsh --force
+
+cleanup-dry:
+	@echo "🔍 クリーンアップ対象ファイルを表示します..."
+	./tools/cleanup.zsh --dry-run
 
 # チェック
 lint:

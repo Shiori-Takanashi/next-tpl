@@ -2,14 +2,39 @@
   "name": "next-tpl",
   "version": "0.1.0",
   "private": true,
+  "description": "Next.js 学習テンプレート - Docker環境とセットアップ自動化付き",
+  "keywords": [
+    "nextjs",
+    "react",
+    "typescript",
+    "tailwindcss",
+    "docker",
+    "template",
+    "learning"
+  ],
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/next-tpl.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/next-tpl/issues"
+  },
+  "homepage": "https://github.com/your-username/next-tpl#readme",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "type-check": "tsc --noEmit",
     "docker:dev": "docker-compose up next-tpl-dev",
+    "docker:dev:bg": "docker-compose up -d next-tpl-dev",
     "docker:build": "docker build -t next-tpl .",
-    "docker:run": "docker run -p 3000:3000 next-tpl"
+    "docker:run": "docker run -p 3000:3000 next-tpl",
+    "clean": "rm -rf .next node_modules package-lock.json",
+    "clean:docker": "docker-compose down && docker system prune -f"
   },
   "engines": {
     "node": "22.11.0",
