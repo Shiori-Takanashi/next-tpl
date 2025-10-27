@@ -1,20 +1,28 @@
-# Next.js Learning Template (next-tpl)
+# Next.js 学習テンプレート (next-tpl)
 
-安定したNext.js学習環境を提供するテンプレートプロジェクト
+🎌 **日本語最適化済み** | モダンで美しいデザイン | 安定した学習環境
 
-## 🎯 学習サンプル
+最新のNext.js + React + TypeScript + TailwindCSS v4を使用した、日本語環境に最適化された学習テンプレートです。
 
-セットアップ後、以下のサンプルページで学習を開始できます：
+## ✨ 特徴
 
-- **メインページ**: `http://localhost:3000/` - テンプレート概要
-- **学習サンプル**: `http://localhost:3000/example` - React/Next.js基礎学習ページ
+### � モダンデザイン
+- **グラスモーフィズム効果**: 美しい半透明レイヤーデザイン
+- **スムーズアニメーション**: fade-in、slide-inエフェクト
+- **レスポンシブ対応**: モバイルから4Kまで完全対応
+- **ダークモード対応**: システム設定に自動追従
 
-学習サンプルページには以下が含まれています：
-- React Hooks（useState, useEffect）の使用例
-- TypeScript型定義の実践例
-- TailwindCSSスタイリング
-- イベントハンドリングと状態管理
-- 非同期処理の実装
+### 🇯🇵 日本語最適化
+- **日本語フォント**: Noto Sans JP（Web最適化済み）
+- **プログラミング用フォント**: JetBrains Mono（日本語コメント対応）
+- **日本語タイポグラフィ**: 適切な行間・字間設定
+- **ロケール設定**: 完全日本語環境
+
+### 🚀 最新技術スタック
+- **Next.js 16.0.0**: App Router + React Server Components
+- **React 19.2.0**: 最新機能フル活用
+- **TailwindCSS v4**: カスタムデザインシステム
+- **TypeScript**: 型安全性確保
 
 ## 🚀 Quick Start
 
