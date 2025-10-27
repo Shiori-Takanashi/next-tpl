@@ -2,7 +2,7 @@
   "name": "next-tpl",
   "version": "0.1.0",
   "private": true,
-  "description": "Next.js 学習テンプレート - Docker環境とセットアップ自動化付き",
+  "description": "🎌 日本語最適化済み Next.js 学習テンプレート - モダンデザイン・Docker環境・完全自動化",
   "keywords": [
     "nextjs",
     "react",
@@ -10,7 +10,11 @@
     "tailwindcss",
     "docker",
     "template",
-    "learning"
+    "learning",
+    "japanese",
+    "日本語",
+    "glassmorphism",
+    "modern-design"
   ],
   "author": "Your Name <your.email@example.com>",
   "license": "MIT",
