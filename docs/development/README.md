@@ -1,20 +1,11 @@
-# Development Documentation
-
-このディレクトリには、Next.js学習テンプレート（next-tpl）の開発過程と実装記録が含まれています。
-
-## 📋 ドキュメント構成
-
-### 開発記録（Development Records）
 # 開発者向けドキュメント
 
 このディレクトリには、Next.js学習テンプレートの開発・保守に関する完全なドキュメントが格納されています。
 
 ## 📋 ドキュメント一覧
 
-### プロジェクト概要
+### プロジェクト基盤
 - [01-project-overview.md](./01-project-overview.md) - プロジェクトの概要と目的
-
-### 技術実装
 - [02-docker-environment.md](./02-docker-environment.md) - Docker環境の設計と実装
 - [03-automation-tools.md](./03-automation-tools.md) - セットアップ自動化とツール
 
@@ -28,6 +19,22 @@
 - [08-testing-strategy.md](./08-testing-strategy.md) - テストとCI/CD戦略
 - [09-security-practices.md](./09-security-practices.md) - セキュリティとベストプラクティス
 - [10-performance-optimization.md](./10-performance-optimization.md) - パフォーマンス最適化ガイド
+
+### UI/UX・技術詳細
+- [11-ui-design-system.md](./11-ui-design-system.md) - デザインシステム設計記録
+- [12-japanese-optimization.md](./12-japanese-optimization.md) - 日本語最適化実装記録
+- [13-tailwindcss-v4.md](./13-tailwindcss-v4.md) - TailwindCSS v4 実装記録
+- [14-vscode-integration.md](./14-vscode-integration.md) - VS Code統合開発環境構築記録
+
+### 自動化・最新技術
+- [15-automation-scripts.md](./15-automation-scripts.md) - 自動化スクリプト詳細実装記録
+- [16-nextjs-16-react-19.md](./16-nextjs-16-react-19.md) - Next.js 16.0.0 + React 19.2.0 実装記録
+- [17-project-completion-analysis.md](./17-project-completion-analysis.md) - プロジェクト完成度と学習効果分析
+
+### 実践・運用
+- [18-error-handling-troubleshooting.md](./18-error-handling-troubleshooting.md) - エラー処理とトラブルシューティング実装記録
+- [19-learning-curriculum.md](./19-learning-curriculum.md) - 学習カリキュラム設計と実装戦略
+- [20-production-deployment.md](./20-production-deployment.md) - プロダクション環境デプロイ戦略
 
 ## 🎯 開発ガイド
 
