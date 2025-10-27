@@ -1,27 +1,34 @@
 /**
  * ESLint設定ファイル
- * Next.js学習テンプレート用
+ * Next.js学習テンプレート用（日本語最適化済み）
  *
  * 学習者向けに基本的なルールのみを設定
  * より厳密なルールは学習が進んでから追加できます
  */
-import { defineConfig } from "eslint/config";
+import js from "@eslint/js";
 import next from "eslint-config-next";
 
-const eslintConfig = defineConfig([
-  // Next.js推奨設定を適用
+const eslintConfig = [
+  // JavaScript推奨設定
+  js.configs.recommended,
+
+  // Next.js推奨設定
   ...next,
 
   // 基本ルール設定
   {
     rules: {
       // 学習段階では警告レベルに設定
-      "@typescript-eslint/no-unused-vars": "warn",
-      "@typescript-eslint/no-explicit-any": "warn",
+      "no-unused-vars": "warn",
+      "no-undef": "error",
 
       // 学習に役立つルール
       "no-console": "warn", // console.logの使用を警告
       "prefer-const": "error", // constを使える場合は使用を強制
+
+      // React/Next.js固有
+      "react/no-unescaped-entities": "warn",
+      "react-hooks/exhaustive-deps": "warn",
     }
   },
 
@@ -32,9 +39,12 @@ const eslintConfig = defineConfig([
       "out/**",
       "build/**",
       "next-env.d.ts",
-      "node_modules/**"
+      "node_modules/**",
+      "*.config.js",
+      "*.config.mjs",
+      "*.config.ts"
     ]
   }
-]);
+];
 
 export default eslintConfig;
