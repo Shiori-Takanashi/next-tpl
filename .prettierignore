@@ -1,0 +1,52 @@
+# Build outputs
+.next/
+out/
+build/
+dist/
+
+# Package managers
+node_modules/
+.pnp/
+.yarn/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env*
+
+# Cache files
+.eslintcache
+*.tsbuildinfo
+.cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/settings.json
+.idea/
+
+# Documentation that shouldn't be formatted
+CHANGELOG.md
+LICENSE
+*.min.js
+*.min.css
+
+# Auto-generated files
+next-env.d.ts
+public/sw.js
+public/workbox-*.js
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Docker files (preserve specific formatting)
+Dockerfile*
+docker-compose*.yml
