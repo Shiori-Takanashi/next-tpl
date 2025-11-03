@@ -35,9 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body
-        className={`${notoSansJP.variable} ${jetBrainsMono.variable} font-sans antialiased`}
-      >
+      <body className={`${notoSansJP.variable} ${jetBrainsMono.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>

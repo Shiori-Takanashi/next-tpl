@@ -51,8 +51,13 @@
 
 @theme inline {
   /* Font families */
-  --font-sans: var(--font-noto-sans-jp), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-mono: var(--font-jetbrains-mono), "SF Mono", Monaco, Inconsolata, "Roboto Mono", Consolas, "Courier New", monospace;
+  --font-sans:
+    var(--font-noto-sans-jp), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono:
+    var(--font-jetbrains-mono), "SF Mono", Monaco, Inconsolata, "Roboto Mono", Consolas,
+    "Courier New", monospace;
 }
 
 /* Base styles */
@@ -63,7 +68,9 @@
 body {
   background: rgb(var(--color-background));
   color: rgb(var(--color-foreground));
-  font-feature-settings: "rlig" 1, "calt" 1;
+  font-feature-settings:
+    "rlig" 1,
+    "calt" 1;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -119,7 +126,12 @@ body {
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, rgb(var(--color-primary)), rgb(var(--color-primary)) 50%, rgb(var(--color-destructive)));
+  background: linear-gradient(
+    135deg,
+    rgb(var(--color-primary)),
+    rgb(var(--color-primary)) 50%,
+    rgb(var(--color-destructive))
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

@@ -36,7 +36,7 @@ const eslintConfig = [
       "react/no-unescaped-entities": "warn",
       "react-hooks/exhaustive-deps": "warn",
       "react/react-in-jsx-scope": "off", // React 19の新しいJSX変換対応
-    }
+    },
   },
 
   // 無視するファイル・ディレクトリ
@@ -49,9 +49,9 @@ const eslintConfig = [
       "node_modules/**",
       "*.config.js",
       "*.config.mjs",
-      "*.config.ts"
-    ]
-  }
+      "*.config.ts",
+    ],
+  },
 ];
 
 export default eslintConfig;
