@@ -1,0 +1,76 @@
+version: 2
+updates:
+  # NPM依存関係の更新
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Asia/Tokyo"
+    open-pull-requests-limit: 5
+    assignees:
+      - "Shiori-Takanashi"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "javascript"
+    groups:
+      # 本番依存関係をグループ化
+      production-dependencies:
+        applies-to: version-updates
+        patterns:
+          - "react*"
+          - "next"
+
+      # 開発依存関係をグループ化
+      development-dependencies:
+        applies-to: version-updates
+        patterns:
+          - "@types/*"
+          - "eslint*"
+          - "typescript"
+          - "tailwindcss"
+          - "@tailwindcss/*"
+    ignore:
+      # メジャーバージョンアップは手動で確認
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+
+  # GitHub Actions の更新
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Asia/Tokyo"
+    open-pull-requests-limit: 3
+    assignees:
+      - "Shiori-Takanashi"
+    commit-message:
+      prefix: "ci"
+    labels:
+      - "github-actions"
+      - "ci/cd"
+
+  # Docker依存関係の更新
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Asia/Tokyo"
+    open-pull-requests-limit: 2
+    assignees:
+      - "Shiori-Takanashi"
+    commit-message:
+      prefix: "docker"
+    labels:
+      - "docker"
+      - "infrastructure"
