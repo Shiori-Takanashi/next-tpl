@@ -36,6 +36,10 @@
 - [19-learning-curriculum.md](./19-learning-curriculum.md) - 学習カリキュラム設計と実装戦略
 - [20-production-deployment.md](./20-production-deployment.md) - プロダクション環境デプロイ戦略
 
+### コンポーネント・リファクタリング
+- [21-component-system-design.md](./21-component-system-design.md) - コンポーネントシステム設計と実装記録
+- [22-ui-ux-refactoring.md](./22-ui-ux-refactoring.md) - UI/UXリファクタリング実装記録
+
 ## 🎯 開発ガイド
 
 ### テンプレートのカスタマイズ
