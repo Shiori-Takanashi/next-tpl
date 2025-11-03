@@ -75,7 +75,7 @@ show_help() {
 # ポート使用状況チェック
 check_port() {
     local port="$1"
-    
+
     if command -v lsof >/dev/null 2>&1; then
         lsof -ti:$port >/dev/null 2>&1
     elif command -v ss >/dev/null 2>&1; then
@@ -91,7 +91,7 @@ check_port() {
 # プロセス終了
 kill_process_on_port() {
     local port="$1"
-    
+
     if command -v lsof >/dev/null 2>&1; then
         local pid=$(lsof -ti:$port 2>/dev/null)
         if [[ -n "$pid" ]]; then
@@ -100,7 +100,7 @@ kill_process_on_port() {
             return 0
         fi
     fi
-    
+
     return 1
 }
 
@@ -111,7 +111,7 @@ start_dev_server() {
     local background="$3"
     local turbo="$4"
     local verbose="$5"
-    
+
     # ポート使用状況チェック
     if check_port "$port"; then
         print_warning "ポート $port は既に使用されています"
@@ -125,7 +125,7 @@ start_dev_server() {
             return 1
         }
     fi
-    
+
     # 依存関係チェック
     if [[ ! -d "node_modules" ]]; then
         print_warning "node_modules が見つかりません。依存関係をインストールしています..."
@@ -134,28 +134,28 @@ start_dev_server() {
             return 1
         }
     fi
-    
+
     print_step "開発サーバーを起動しています..."
     print_info "URL: http://$host:$port"
-    
+
     # 起動コマンド構築
     local dev_cmd="npm run dev"
     local env_vars="PORT=$port HOST=$host"
-    
+
     if [[ "$turbo" == "true" ]]; then
         env_vars="$env_vars TURBOPACK=1"
         print_info "Turbopackモードで起動します"
     fi
-    
+
     if [[ "$background" == "true" ]]; then
         print_info "バックグラウンドで起動します"
         print_warning "停止するには: ./tools/dev-server.zsh stop"
-        
+
         # バックグラウンド起動
         nohup env $env_vars $dev_cmd > "/tmp/next-dev-server.log" 2>&1 &
         local pid=$!
         echo $pid > "$PID_FILE"
-        
+
         # 起動確認
         sleep 3
         if check_port "$port"; then
@@ -175,7 +175,7 @@ start_dev_server() {
 # 開発サーバー停止
 stop_dev_server() {
     local port="$1"
-    
+
     # PIDファイルから停止
     if [[ -f "$PID_FILE" ]]; then
         local pid=$(cat "$PID_FILE")
@@ -189,7 +189,7 @@ stop_dev_server() {
             rm -f "$PID_FILE"
         fi
     fi
-    
+
     # ポートベースで停止
     if check_port "$port"; then
         print_step "ポート $port のプロセスを停止しています..."
@@ -203,20 +203,20 @@ stop_dev_server() {
 check_server_status() {
     local port="$1"
     local host="$2"
-    
+
     print_info "サーバー状態をチェックしています..."
     echo ""
-    
+
     # ポート使用状況
     if check_port "$port"; then
         print_success "ポート $port: 使用中"
-        
+
         # PIDファイル確認
         if [[ -f "$PID_FILE" ]]; then
             local pid=$(cat "$PID_FILE")
             if kill -0 $pid 2>/dev/null; then
                 print_info "プロセスID: $pid"
-                
+
                 # プロセス情報
                 if command -v ps >/dev/null 2>&1; then
                     local process_info=$(ps -p $pid -o pid,ppid,cmd --no-headers 2>/dev/null)
@@ -229,12 +229,12 @@ check_server_status() {
                 rm -f "$PID_FILE"
             fi
         fi
-        
+
         # HTTP接続テスト
         print_step "HTTP接続をテストしています..."
         if curl -s "http://$host:$port" >/dev/null 2>&1; then
             print_success "HTTP接続: OK"
-            
+
             # レスポンス時間測定
             local response_time=$(curl -o /dev/null -s -w "%{time_total}" "http://$host:$port" 2>/dev/null)
             print_info "レスポンス時間: ${response_time}秒"
@@ -245,17 +245,17 @@ check_server_status() {
         print_warning "ポート $port: 未使用"
         print_info "サーバーは起動していません"
     fi
-    
+
     # リソース使用状況
     echo ""
     print_info "システムリソース:"
-    
+
     # CPU使用率
     if command -v top >/dev/null 2>&1; then
         local cpu_usage=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1"%"}')
         print_info "CPU使用率: $cpu_usage"
     fi
-    
+
     # メモリ使用状況
     if command -v free >/dev/null 2>&1; then
         local memory_info=$(free -h | grep Mem | awk '{print $3"/"$2}')
@@ -267,18 +267,18 @@ check_server_status() {
 start_docker_dev() {
     local background="$1"
     local verbose="$2"
-    
+
     if [[ ! -f "$DOCKER_COMPOSE_FILE" ]]; then
         print_error "docker-compose.yml が見つかりません"
         return 1
     fi
-    
+
     print_step "Docker開発サーバーを起動しています..."
-    
+
     if [[ "$background" == "true" ]]; then
         print_info "バックグラウンドで起動します"
         docker-compose up -d next-tpl-dev
-        
+
         # 起動確認
         sleep 5
         if docker-compose ps next-tpl-dev | grep -q "Up"; then
@@ -298,10 +298,10 @@ start_docker_dev() {
 # Docker開発サーバー停止
 stop_docker_dev() {
     print_step "Docker開発サーバーを停止しています..."
-    
+
     docker-compose stop next-tpl-dev
     docker-compose rm -f next-tpl-dev
-    
+
     print_success "Docker開発サーバーを停止しました"
 }
 
@@ -309,7 +309,7 @@ stop_docker_dev() {
 show_logs() {
     local mode="$1"
     local follow="$2"
-    
+
     case "$mode" in
         "docker")
             if [[ "$follow" == "true" ]]; then
@@ -340,14 +340,14 @@ open_browser() {
     local port="$1"
     local host="$2"
     local url="http://$host:$port"
-    
+
     if ! check_port "$port"; then
         print_error "サーバーがポート $port で起動していません"
         return 1
     fi
-    
+
     print_info "ブラウザでサーバーを開いています: $url"
-    
+
     if command -v xdg-open >/dev/null 2>&1; then
         xdg-open "$url" >/dev/null 2>&1 &
     elif command -v open >/dev/null 2>&1; then
@@ -363,13 +363,13 @@ open_browser() {
 health_check() {
     local port="$1"
     local host="$2"
-    
+
     print_info "ヘルスチェックを実行しています..."
     echo ""
-    
+
     local checks_passed=0
     local total_checks=5
-    
+
     # 1. ポートチェック
     print_step "1. ポート可用性チェック"
     if check_port "$port"; then
@@ -378,7 +378,7 @@ health_check() {
     else
         print_error "✗ ポート $port は使用されていません"
     fi
-    
+
     # 2. HTTP接続チェック
     print_step "2. HTTP接続チェック"
     if curl -s "http://$host:$port" >/dev/null 2>&1; then
@@ -387,7 +387,7 @@ health_check() {
     else
         print_error "✗ HTTP接続失敗"
     fi
-    
+
     # 3. レスポンス内容チェック
     print_step "3. レスポンス内容チェック"
     local response=$(curl -s "http://$host:$port" 2>/dev/null)
@@ -397,7 +397,7 @@ health_check() {
     else
         print_error "✗ 有効なHTMLレスポンスがありません"
     fi
-    
+
     # 4. JavaScript/CSSアセットチェック
     print_step "4. アセットチェック"
     if echo "$response" | grep -q "_next/static\|/static"; then
@@ -406,7 +406,7 @@ health_check() {
     else
         print_warning "? Next.jsアセットが見つかりません"
     fi
-    
+
     # 5. パフォーマンスチェック
     print_step "5. パフォーマンスチェック"
     local response_time=$(curl -o /dev/null -s -w "%{time_total}" "http://$host:$port" 2>/dev/null)
@@ -416,10 +416,10 @@ health_check() {
     else
         print_warning "? レスポンス時間が遅い: ${response_time}秒"
     fi
-    
+
     echo ""
     print_info "ヘルスチェック結果: $checks_passed/$total_checks"
-    
+
     if [[ $checks_passed -eq $total_checks ]]; then
         print_success "すべてのチェックに合格しました"
     elif [[ $checks_passed -ge $((total_checks - 1)) ]]; then
@@ -433,40 +433,40 @@ health_check() {
 monitor_server() {
     local port="$1"
     local host="$2"
-    
+
     print_info "リアルタイム監視を開始します (Ctrl+C で停止)"
     echo ""
-    
+
     while true; do
         clear
         print_info "=== 開発サーバー監視 ($(date)) ==="
         echo ""
-        
+
         # 基本ステータス
         if check_port "$port"; then
             print_success "サーバー: 起動中"
-            
+
             # レスポンス時間
             local response_time=$(curl -o /dev/null -s -w "%{time_total}" "http://$host:$port" 2>/dev/null || echo "N/A")
             print_info "レスポンス時間: ${response_time}秒"
         else
             print_error "サーバー: 停止中"
         fi
-        
+
         # システムリソース
         if command -v top >/dev/null 2>&1; then
             echo ""
             print_info "システム使用状況:"
             top -bn1 | head -5
         fi
-        
+
         # 最新ログ (Docker の場合)
         if docker-compose ps next-tpl-dev 2>/dev/null | grep -q "Up"; then
             echo ""
             print_info "最新ログ (Docker):"
             docker-compose logs --tail=3 next-tpl-dev 2>/dev/null
         fi
-        
+
         sleep 5
     done
 }
@@ -474,20 +474,20 @@ monitor_server() {
 # 開発環境クリーンアップ
 clean_dev_env() {
     print_step "開発環境をクリーンアップしています..."
-    
+
     # ローカルサーバー停止
     stop_dev_server "3000"
-    
+
     # Dockerサーバー停止
     stop_docker_dev 2>/dev/null || true
-    
+
     # 一時ファイル削除
     rm -f /tmp/next-dev-server.log
     rm -f "$PID_FILE"
-    
+
     # Next.jsキャッシュクリア
     rm -rf .next/cache 2>/dev/null || true
-    
+
     print_success "開発環境のクリーンアップが完了しました"
 }
 
@@ -495,14 +495,14 @@ clean_dev_env() {
 main() {
     local command="$1"
     shift
-    
+
     local port="3000"
     local host="localhost"
     local background="false"
     local turbo="false"
     local verbose="false"
     local follow="false"
-    
+
     # オプション解析
     while [[ $# -gt 0 ]]; do
         case "$1" in
@@ -533,7 +533,7 @@ main() {
         esac
         shift
     done
-    
+
     # コマンド実行
     case "$command" in
         "start"|"s")

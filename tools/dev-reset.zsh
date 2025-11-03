@@ -101,10 +101,10 @@ execute_removal() {
     local pattern="$1"
     local description="$2"
     local dry_run="$3"
-    
+
     # グロブパターンで該当ファイル検索
     local files=(${~pattern})
-    
+
     # 該当するファイルが存在するかチェック
     if [[ ${#files[@]} -gt 0 && "${files[1]}" != "$pattern" ]]; then
         for file in $files; do
@@ -134,7 +134,7 @@ execute_removal() {
 process_category() {
     local category="$1"
     local dry_run="$2"
-    
+
     case "$category" in
         "cache")
             print_info "キャッシュファイルをクリーンアップしています..."
@@ -185,9 +185,9 @@ process_category() {
 interactive_mode() {
     print_info "対話的リセットモードを開始します..."
     echo ""
-    
+
     local categories=()
-    
+
     # カテゴリ選択
     for category description in ${(kv)RESET_TARGETS}; do
         read -q "?$description をクリーンアップしますか? (y/N): " && {
@@ -195,18 +195,18 @@ interactive_mode() {
             categories+=($category)
         } || echo
     done
-    
+
     if [[ ${#categories[@]} -eq 0 ]]; then
         print_warning "何も選択されませんでした"
         return 0
     fi
-    
+
     echo ""
     print_info "選択されたカテゴリ:"
     for category in $categories; do
         echo "  - ${RESET_TARGETS[$category]}"
     done
-    
+
     echo ""
     read -q "?実行しますか? (y/N): " && {
         echo
@@ -223,31 +223,31 @@ interactive_mode() {
 # プレビューモード
 preview_mode() {
     local categories=("$@")
-    
+
     print_info "削除対象ファイルをプレビューしています..."
     echo ""
-    
+
     for category in $categories; do
         echo "📂 ${RESET_TARGETS[$category]}:"
         process_category "$category" "true"
         echo ""
     done
-    
+
     print_warning "実際の削除を行う場合は --dry-run オプションを外してください"
 }
 
 # 環境復旧
 restore_environment() {
     print_info "環境復旧を開始します..."
-    
+
     # Node.js バージョンチェック
     if command -v node >/dev/null 2>&1; then
         local current_version=$(node --version)
         print_info "Node.js バージョン: $current_version"
-        
+
         if [[ "$current_version" != "v22.11.0" ]]; then
             print_warning "推奨バージョン v22.11.0 と異なります"
-            
+
             if command -v nvm >/dev/null 2>&1; then
                 read -q "?nvm で v22.11.0 に切り替えますか? (y/N): " && {
                     echo
@@ -256,7 +256,7 @@ restore_environment() {
             fi
         fi
     fi
-    
+
     # 依存関係の再インストール
     if [[ ! -d "node_modules" ]]; then
         print_step "依存関係を再インストールしています..."
@@ -266,13 +266,13 @@ restore_environment() {
         }
         print_success "依存関係のインストールが完了しました"
     fi
-    
+
     # プロジェクトの整合性チェック
     print_step "プロジェクトの整合性をチェックしています..."
     npm run type-check || {
         print_warning "TypeScript の型チェックでエラーが発生しました"
     }
-    
+
     print_success "環境復旧が完了しました"
 }
 
@@ -282,7 +282,7 @@ main() {
     local dry_run="false"
     local interactive="false"
     local with_restore="false"
-    
+
     # オプション解析
     while [[ $# -gt 0 ]]; do
         case "$1" in
@@ -320,7 +320,7 @@ main() {
         esac
         shift
     done
-    
+
     # デフォルト動作
     if [[ ${#categories[@]} -eq 0 && "$interactive" != "true" ]]; then
         print_info "オプションが指定されていません。ヘルプを表示します。"
@@ -328,19 +328,19 @@ main() {
         show_help
         return 0
     fi
-    
+
     # 対話的モード
     if [[ "$interactive" == "true" ]]; then
         interactive_mode
         return $?
     fi
-    
+
     # プレビューモード
     if [[ "$dry_run" == "true" ]]; then
         preview_mode $categories
         return 0
     fi
-    
+
     # 実行前確認
     if [[ ${#categories[@]} -gt 0 ]]; then
         echo ""
@@ -354,18 +354,18 @@ main() {
             print_info "キャンセルされました"
             return 0
         }
-        
+
         # 実行
         for category in $categories; do
             process_category "$category" "false"
         done
-        
+
         # 環境復旧
         if [[ "$with_restore" == "true" ]]; then
             echo ""
             restore_environment
         fi
-        
+
         print_success "開発環境のリセットが完了しました"
     fi
 }
