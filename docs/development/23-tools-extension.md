@@ -1,6 +1,6 @@
 # ツールセット拡張実装記録
 
-**作成日**: 2025年11月4日  
+**作成日**: 2025年11月4日
 **目的**: 学習者・開発者向け包括的開発支援ツールの実装
 
 ## 📋 実装概要
@@ -35,12 +35,12 @@ Next.js学習テンプレートの`tools/`ディレクトリを大幅に拡張�
 learn_start() {
     local branch_name="$1"
     local full_branch_name="learn/$branch_name"
-    
+
     # mainブランチベースで新規作成
     git checkout main 2>/dev/null || {
         print_warning "mainブランチが存在しません。現在のブランチから作成します。"
     }
-    
+
     git checkout -b "$full_branch_name"
     print_success "学習ブランチ '$full_branch_name' を作成しました"
 }
@@ -77,7 +77,7 @@ declare -A CACHE_PATTERNS=(
 execute_removal() {
     local pattern="$1"
     local dry_run="$3"
-    
+
     if [[ "$dry_run" == "true" ]]; then
         # プレビューモード
         echo "  📁 $file (削除対象)"
@@ -111,7 +111,7 @@ NPMパッケージの包括的な管理・監査・分析ツール
 security_audit() {
     local audit_output=$(npm audit --json 2>/dev/null)
     local vulnerabilities=$(echo "$audit_output" | jq '.metadata.vulnerabilities.total // 0')
-    
+
     if [[ "$vulnerabilities" -eq 0 ]]; then
         print_success "脆弱性は見つかりませんでした"
     else
@@ -143,7 +143,7 @@ security_audit() {
 # デプロイ前チェック
 pre_deploy_check() {
     local errors=0
-    
+
     # TypeScript型チェック
     if npm run type-check >/dev/null 2>&1; then
         print_success "TypeScript型チェック ✓"
@@ -151,7 +151,7 @@ pre_deploy_check() {
         print_error "TypeScript型チェックでエラーが発生しました"
         ((errors++))
     fi
-    
+
     # セキュリティ脆弱性チェック
     local high_vulnerabilities=$(npm audit --audit-level=high --json | jq '.metadata.vulnerabilities.high // 0')
     if [[ "$high_vulnerabilities" -eq 0 ]]; then
@@ -159,7 +159,7 @@ pre_deploy_check() {
     else
         print_warning "$high_vulnerabilities 件の高リスク脆弱性が見つかりました"
     fi
-    
+
     return $errors
 }
 ```
@@ -187,26 +187,26 @@ pre_deploy_check() {
 health_check() {
     local checks_passed=0
     local total_checks=5
-    
+
     # 1. ポート可用性チェック
     if check_port "$port"; then
         print_success "✓ ポート $port は使用中"
         ((checks_passed++))
     fi
-    
+
     # 2. HTTP接続チェック
     if curl -s "http://$host:$port" >/dev/null 2>&1; then
         print_success "✓ HTTP接続成功"
         ((checks_passed++))
     fi
-    
+
     # 3. レスポンス内容チェック
     local response=$(curl -s "http://$host:$port")
     if echo "$response" | grep -q "<!DOCTYPE html>"; then
         print_success "✓ HTMLレスポンス確認"
         ((checks_passed++))
     fi
-    
+
     print_info "ヘルスチェック結果: $checks_passed/$total_checks"
 }
 ```
@@ -276,25 +276,25 @@ print_error() {
 # 包括的なエラーハンドリング
 execute_with_safety() {
     local operation="$1"
-    
+
     # 事前チェック
     if ! pre_check; then
         print_error "事前チェックに失敗しました"
         return 1
     fi
-    
+
     # バックアップ作成
     create_backup || {
         print_warning "バックアップの作成に失敗しましたが続行します"
     }
-    
+
     # メイン処理
     if ! $operation; then
         print_error "操作に失敗しました"
         print_info "バックアップからの復旧: restore_backup"
         return 1
     fi
-    
+
     print_success "操作が完了しました"
 }
 ```
