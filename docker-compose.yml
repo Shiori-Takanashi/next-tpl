@@ -1,6 +1,7 @@
-version: '3.8'
+version: "3.8"
 
 services:
+  # 本番環境プレビュー
   next-tpl:
     build:
       context: .
@@ -9,9 +10,11 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
+    env_file:
+      - .env.production
     restart: unless-stopped
 
-  # 開発用サービス
+  # 開発環境
   next-tpl-dev:
     build:
       context: .
@@ -24,4 +27,10 @@ services:
       - /app/.next
     environment:
       - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    env_file:
+      - .env.development
     restart: unless-stopped
+    stdin_open: true
+    tty: true
