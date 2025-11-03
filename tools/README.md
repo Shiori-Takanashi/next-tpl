@@ -6,10 +6,15 @@
 
 ```
 tools/
-├── README.md      # このファイル
-├── setup.sh       # Bash版セットアップスクリプト
-├── setup.zsh      # Zsh版セットアップスクリプト
-└── cleanup.zsh    # 不要ファイル削除スクリプト
+├── README.md          # このファイル
+├── setup.sh           # Bash版セットアップスクリプト
+├── setup.zsh          # Zsh版セットアップスクリプト
+├── cleanup.zsh        # 不要ファイル削除スクリプト
+├── git-helper.zsh     # Git操作支援ツール
+├── dev-reset.zsh      # 開発環境リセットツール
+├── deps-manager.zsh   # 依存関係管理ツール
+├── deploy.zsh         # デプロイ支援ツール
+└── dev-server.zsh     # 開発サーバー管理ツール
 ```
 
 ## 🚀 使用方法
@@ -34,6 +39,30 @@ zsh tools/setup.zsh
 ./tools/cleanup.zsh --dry-run  # 削除対象確認
 ./tools/cleanup.zsh           # インタラクティブ削除
 ./tools/cleanup.zsh --force   # 強制削除
+
+# Git操作支援
+./tools/git-helper.zsh learn-start "component-practice"
+./tools/git-helper.zsh learn-save "コンポーネント作成完了"
+./tools/git-helper.zsh learn-reset
+
+# 開発環境リセット
+./tools/dev-reset.zsh --soft    # ビルド成果物のみ削除
+./tools/dev-reset.zsh --full    # 完全リセット
+
+# 依存関係管理
+./tools/deps-manager.zsh check   # 依存関係チェック
+./tools/deps-manager.zsh update  # パッケージ更新
+./tools/deps-manager.zsh audit   # セキュリティ監査
+
+# デプロイ支援
+./tools/deploy.zsh build --clean  # クリーンビルド
+./tools/deploy.zsh preview        # プレビュー
+./tools/deploy.zsh check          # デプロイ前チェック
+
+# 開発サーバー管理
+./tools/dev-server.zsh start      # ローカルサーバー起動
+./tools/dev-server.zsh docker-start # Dockerサーバー起動
+./tools/dev-server.zsh health     # ヘルスチェック
 
 # または簡単なラッパー経由
 ./cleanup --dry-run
@@ -63,6 +92,54 @@ zsh tools/setup.zsh
   - インタラクティブ確認で安全性確保
   - ファイルサイズ表示と統計情報
   - 保護ファイル機能で重要ファイルを誤削除防止
+
+### git-helper.zsh (Git操作支援)
+- **対象**: Zsh 5.0以上
+- **機能**: 学習者向けGitワークフロー自動化
+- **特徴**:
+  - 学習ブランチの作成・管理・削除
+  - 学習内容の保存とリセット
+  - クイックコミット機能
+  - 詳細なステータス表示
+  - リモート同期とブランチクリーンアップ
+
+### dev-reset.zsh (開発環境リセット)
+- **対象**: Zsh 5.0以上
+- **機能**: 開発環境の初期化・リセット
+- **特徴**:
+  - ソフト/フル/カスタムリセットモード
+  - カテゴリ別ファイル削除（キャッシュ、ビルド、依存関係等）
+  - インタラクティブモードで安全な操作
+  - 環境復旧機能で自動再セットアップ
+
+### deps-manager.zsh (依存関係管理)
+- **対象**: Zsh 5.0以上
+- **機能**: パッケージ管理・セキュリティ監査
+- **特徴**:
+  - 古いパッケージの検出と更新
+  - セキュリティ脆弱性の監査と修正
+  - 依存関係の詳細分析とレポート生成
+  - バックアップ・復元機能で安全な更新
+
+### deploy.zsh (デプロイ支援)
+- **対象**: Zsh 5.0以上
+- **機能**: ビルド・デプロイ自動化
+- **特徴**:
+  - 本番ビルドとプレビュー機能
+  - Docker統合でコンテナベースデプロイ
+  - デプロイ前チェックで品質保証
+  - Vercel/Netlify等のプラットフォーム対応
+  - バンドル分析とパフォーマンス測定
+
+### dev-server.zsh (開発サーバー管理)
+- **対象**: Zsh 5.0以上
+- **機能**: ローカル・Docker開発環境管理
+- **特徴**:
+  - ローカル/Docker両対応のサーバー管理
+  - バックグラウンド起動とプロセス管理
+  - ヘルスチェックとリアルタイム監視
+  - ポート管理と自動衝突解決
+  - ログ表示とブラウザ連携
 
 ## 🛠️ 開発者向け情報
 
