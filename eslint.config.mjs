@@ -17,6 +17,12 @@ const eslintConfig = [
 
   // 基本ルール設定
   {
+    languageOptions: {
+      globals: {
+        React: "readonly",
+        JSX: "readonly",
+      },
+    },
     rules: {
       // 学習段階では警告レベルに設定
       "no-unused-vars": "warn",
@@ -29,6 +35,7 @@ const eslintConfig = [
       // React/Next.js固有
       "react/no-unescaped-entities": "warn",
       "react-hooks/exhaustive-deps": "warn",
+      "react/react-in-jsx-scope": "off", // React 19の新しいJSX変換対応
     }
   },
 
