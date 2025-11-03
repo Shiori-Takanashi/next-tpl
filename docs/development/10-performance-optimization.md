@@ -1,23 +1,26 @@
 # 10. パフォーマンス最適化ガイド
 
-**作成日**: 2025-10-26
-**目的**: Next.js学習テンプレートにおけるパフォーマンス最適化戦略と実装
+**作成日**: 2025-10-26 **目的**:
+Next.js学習テンプレートにおけるパフォーマンス最適化戦略と実装
 
 ## ⚡ パフォーマンス最適化の基本方針
 
 ### Core Web Vitals を中心とした最適化
 
 #### 1. Largest Contentful Paint (LCP) - 2.5秒以内
+
 - 画像最適化とレスポンシブ配信
 - フォント読み込み最適化
 - サーバーレスポンス時間短縮
 
 #### 2. First Input Delay (FID) - 100ms以内
+
 - JavaScript実行時間の最適化
 - イベントハンドラーの効率化
 - メインスレッドブロッキング回避
 
 #### 3. Cumulative Layout Shift (CLS) - 0.1以下
+
 - 画像・動画のサイズ指定
 - 動的コンテンツの領域確保
 - フォント表示安定化
@@ -27,6 +30,7 @@
 ### Next.js Image コンポーネント活用
 
 #### 1. 基本実装
+
 ```jsx
 // components/OptimizedImage.tsx
 import Image from 'next/image';
@@ -74,22 +78,24 @@ export function OptimizedImage({
 ```
 
 #### 2. レスポンシブ画像設定
+
 ```javascript
 // next.config.js
 const nextConfig = {
   images: {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    formats: ['image/webp'],
+    formats: ["image/webp"],
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-  }
+  },
 };
 ```
 
 ### 3. 画像圧縮とフォーマット最適化
 
 #### 自動画像最適化
+
 ```bash
 # 画像最適化スクリプト
 npm install --save-dev imagemin imagemin-webp imagemin-mozjpeg imagemin-pngquant
@@ -119,19 +125,20 @@ const imageminPngquant = require('imagemin-pngquant');
 ### 1. 動的インポートとCode Splitting
 
 #### ページレベル分割
+
 ```jsx
 // pages/dashboard.tsx
-import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
 
 // 重いコンポーネントの遅延読み込み
-const HeavyChart = dynamic(() => import('../components/HeavyChart'), {
+const HeavyChart = dynamic(() => import("../components/HeavyChart"), {
   loading: () => <div>Loading chart...</div>,
-  ssr: false
+  ssr: false,
 });
 
-const AdminPanel = dynamic(() => import('../components/AdminPanel'), {
-  loading: () => <div>Loading admin panel...</div>
+const AdminPanel = dynamic(() => import("../components/AdminPanel"), {
+  loading: () => <div>Loading admin panel...</div>,
 });
 
 export default function Dashboard() {
@@ -152,16 +159,17 @@ export default function Dashboard() {
 ```
 
 #### ライブラリレベル分割
+
 ```jsx
 // hooks/useChart.ts
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export function useChart() {
   const [Chart, setChart] = useState(null);
 
   useEffect(() => {
     // Chart.js を動的にインポート
-    import('chart.js').then((chartModule) => {
+    import("chart.js").then(chartModule => {
       setChart(() => chartModule.Chart);
     });
   }, []);
@@ -173,21 +181,23 @@ export function useChart() {
 ### 2. Tree Shaking最適化
 
 #### Lodash の最適化例
+
 ```javascript
 // 悪い例
-import _ from 'lodash';
+import _ from "lodash";
 const result = _.debounce(callback, 300);
 
 // 良い例
-import { debounce } from 'lodash';
+import { debounce } from "lodash";
 const result = debounce(callback, 300);
 
 // さらに良い例
-import debounce from 'lodash/debounce';
+import debounce from "lodash/debounce";
 const result = debounce(callback, 300);
 ```
 
 #### Webpack Bundle Analyzer 設定
+
 ```json
 // package.json
 {
@@ -201,8 +211,8 @@ const result = debounce(callback, 300);
 
 ```javascript
 // next.config.js
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
 });
 
 module.exports = withBundleAnalyzer({
@@ -215,6 +225,7 @@ module.exports = withBundleAnalyzer({
 ### 1. Server-Side Rendering (SSR) vs Static Generation (SSG)
 
 #### SSG での最適化
+
 ```jsx
 // pages/blog/[slug].tsx
 import { GetStaticPaths, GetStaticProps } from 'next';
@@ -259,6 +270,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 ```
 
 #### ISR (Incremental Static Regeneration) 活用
+
 ```jsx
 // pages/products/[id].tsx
 export const getStaticProps: GetStaticProps = async ({ params }) => {
@@ -278,6 +290,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 ### 2. React最適化パターン
 
 #### useMemo と useCallback の適切な使用
+
 ```jsx
 // components/ExpensiveList.tsx
 import { useMemo, useCallback, memo } from 'react';
@@ -343,6 +356,7 @@ const ListItem = memo(function ListItem({
 ```
 
 #### Virtual Scrolling 実装
+
 ```jsx
 // components/VirtualList.tsx
 import { FixedSizeList as List } from 'react-window';
@@ -380,25 +394,26 @@ export function VirtualList({ items, height, itemHeight }: VirtualListProps) {
 ### 1. Service Worker とキャッシング
 
 #### PWA 設定
+
 ```javascript
 // next.config.js
-const withPWA = require('next-pwa')({
-  dest: 'public',
+const withPWA = require("next-pwa")({
+  dest: "public",
   register: true,
   skipWaiting: true,
   runtimeCaching: [
     {
       urlPattern: /^https?.*/,
-      handler: 'NetworkFirst',
+      handler: "NetworkFirst",
       options: {
-        cacheName: 'offlineCache',
+        cacheName: "offlineCache",
         expiration: {
           maxEntries: 200,
-          maxAgeSeconds: 24 * 60 * 60 // 24 hours
-        }
-      }
-    }
-  ]
+          maxAgeSeconds: 24 * 60 * 60, // 24 hours
+        },
+      },
+    },
+  ],
 });
 
 module.exports = withPWA({
@@ -409,35 +424,35 @@ module.exports = withPWA({
 ### 2. CDN とリソース最適化
 
 #### 静的アセット最適化
+
 ```javascript
 // next.config.js
 const nextConfig = {
-  assetPrefix: process.env.NODE_ENV === 'production'
-    ? 'https://cdn.example.com'
-    : '',
+  assetPrefix:
+    process.env.NODE_ENV === "production" ? "https://cdn.example.com" : "",
 
   async headers() {
     return [
       {
-        source: '/_next/static/(.*)',
+        source: "/_next/static/(.*)",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable'
-          }
-        ]
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
       },
       {
-        source: '/images/(.*)',
+        source: "/images/(.*)",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=86400'
-          }
-        ]
-      }
+            key: "Cache-Control",
+            value: "public, max-age=86400",
+          },
+        ],
+      },
     ];
-  }
+  },
 };
 ```
 
@@ -446,23 +461,26 @@ const nextConfig = {
 ### 1. Core Web Vitals 測定
 
 #### 自動計測実装
+
 ```jsx
 // pages/_app.tsx
-import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals';
+import { getCLS, getFID, getFCP, getLCP, getTTFB } from "web-vitals";
 
 function reportWebVitals(metric) {
   // アナリティクスに送信
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', metric.name, {
-      event_category: 'Web Vitals',
+  if (typeof window !== "undefined" && window.gtag) {
+    window.gtag("event", metric.name, {
+      event_category: "Web Vitals",
       event_label: metric.id,
-      value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
-      non_interaction: true
+      value: Math.round(
+        metric.name === "CLS" ? metric.value * 1000 : metric.value
+      ),
+      non_interaction: true,
     });
   }
 
   // 開発環境でのログ出力
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === "development") {
     console.log(metric);
   }
 }
@@ -472,7 +490,7 @@ export function reportWebVitals(metric) {
 }
 
 // Web Vitals 初期化
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   getCLS(reportWebVitals);
   getFID(reportWebVitals);
   getFCP(reportWebVitals);
@@ -484,49 +502,51 @@ if (typeof window !== 'undefined') {
 ### 2. Lighthouse CI 統合
 
 #### GitHub Actions 設定
+
 ```yaml
 # .github/workflows/lighthouse.yml
 name: Lighthouse CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   lighthouse:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '22'
-        cache: 'npm'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Build application
-      run: npm run build
+      - name: Build application
+        run: npm run build
 
-    - name: Start application
-      run: npm start &
+      - name: Start application
+        run: npm start &
 
-    - name: Wait for server
-      run: npx wait-on http://localhost:3000
+      - name: Wait for server
+        run: npx wait-on http://localhost:3000
 
-    - name: Run Lighthouse CI
-      run: |
-        npm install -g @lhci/cli
-        lhci collect --url=http://localhost:3000
-        lhci assert
+      - name: Run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli
+          lhci collect --url=http://localhost:3000
+          lhci assert
 ```
 
 #### Lighthouse設定
+
 ```json
 // lighthouserc.json
 {
@@ -538,10 +558,10 @@ jobs:
     },
     "assert": {
       "assertions": {
-        "categories:performance": ["error", {"minScore": 0.8}],
-        "categories:accessibility": ["error", {"minScore": 0.9}],
-        "categories:best-practices": ["error", {"minScore": 0.9}],
-        "categories:seo": ["error", {"minScore": 0.9}]
+        "categories:performance": ["error", { "minScore": 0.8 }],
+        "categories:accessibility": ["error", { "minScore": 0.9 }],
+        "categories:best-practices": ["error", { "minScore": 0.9 }],
+        "categories:seo": ["error", { "minScore": 0.9 }]
       }
     }
   }
@@ -551,18 +571,21 @@ jobs:
 ## 🎯 学習段階別最適化ガイド
 
 ### 初級者（基本最適化）
+
 1. ✅ Next.js Image コンポーネント使用
 2. ✅ 基本的なSSG/SSR理解
 3. ⏳ 画像フォーマット最適化
 4. ⏳ バンドルサイズ分析
 
 ### 中級者（実践最適化）
+
 1. ⏳ 動的インポートとCode Splitting
 2. ⏳ React最適化パターン実装
 3. ⏳ Core Web Vitals測定
 4. ⏳ キャッシング戦略実装
 
 ### 上級者（高度最適化）
+
 1. ⏳ Service Worker実装
 2. ⏳ Virtual Scrolling導入
 3. ⏳ CDN統合と最適化
@@ -571,6 +594,7 @@ jobs:
 ## 📈 最適化効果測定
 
 ### 目標指標
+
 - **LCP**: < 2.5秒
 - **FID**: < 100ms
 - **CLS**: < 0.1
@@ -578,6 +602,7 @@ jobs:
 - **Lighthouse Score**: > 90点
 
 ### 継続的改善プロセス
+
 1. 週次パフォーマンス測定
 2. ボトルネック特定と改善
 3. 新機能追加時の影響評価

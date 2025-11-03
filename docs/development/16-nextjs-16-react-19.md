@@ -1,22 +1,26 @@
 # Next.js 16.0.0 + React 19.2.0 実装記録
 
 ## 概要
+
 最新版Next.js 16.0.0とReact 19.2.0を活用した実装の詳細記録
 
 ## Next.js 16.0.0 新機能活用
 
 ### Turbopack採用
+
 ```bash
 # 開発時の高速ビルド
 npm run dev  # 自動的にTurbopackを使用
 ```
 
 #### Turbopackの恩恵
+
 - **起動時間**: 従来の約5倍高速
 - **HMR速度**: ミリ秒単位での更新
 - **バンドルサイズ**: 最適化されたチャンク分割
 
 ### App Router完全移行
+
 ```typescript
 // app/layout.tsx - ルートレイアウト
 import type { Metadata } from "next";
@@ -40,6 +44,7 @@ export default function RootLayout({
 ```
 
 ### Server Components活用
+
 ```typescript
 // app/page.tsx - デフォルトでServer Component
 export default function Home() {
@@ -55,12 +60,14 @@ export default function Home() {
 ## React 19.2.0 新機能
 
 ### 改善されたHydration
+
 ```typescript
 // 自動的に最適化されたハイドレーション
 // エラー回復機能が大幅向上
 ```
 
 ### Concurrent Features
+
 ```typescript
 // 自動的に有効化される並行機能
 // - Automatic Batching
@@ -69,6 +76,7 @@ export default function Home() {
 ```
 
 ### TypeScript統合強化
+
 ```typescript
 // より厳密な型推論
 interface PageProps {
@@ -84,23 +92,25 @@ export default function Page({ params, searchParams }: PageProps) {
 ## パフォーマンス最適化
 
 ### 自動最適化機能
+
 ```typescript
 // next.config.ts
-import type { NextConfig } from 'next';
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   // 自動的に有効化される最適化
   experimental: {
     turbo: {
       // Turbopack設定（必要に応じて）
-    }
-  }
+    },
+  },
 };
 
 export default nextConfig;
 ```
 
 ### Image最適化
+
 ```typescript
 import Image from 'next/image';
 
@@ -115,13 +125,14 @@ import Image from 'next/image';
 ```
 
 ### Font最適化
+
 ```typescript
-import { Noto_Sans_JP } from 'next/font/google';
+import { Noto_Sans_JP } from "next/font/google";
 
 const notoSansJP = Noto_Sans_JP({
-  subsets: ['latin'],
-  display: 'swap', // FOIT回避
-  variable: '--font-noto-sans-jp',
+  subsets: ["latin"],
+  display: "swap", // FOIT回避
+  variable: "--font-noto-sans-jp",
 });
 
 // 自動的にプリロードされる
@@ -130,6 +141,7 @@ const notoSansJP = Noto_Sans_JP({
 ## 開発体験の向上
 
 ### 開発サーバーの改善
+
 ```bash
 # より高速な起動
 npm run dev
@@ -138,6 +150,7 @@ npm run dev
 ```
 
 ### エラー処理の改善
+
 ```typescript
 // より詳細なエラー情報
 // - スタックトレースの改善
@@ -146,6 +159,7 @@ npm run dev
 ```
 
 ### Hot Reload最適化
+
 ```typescript
 // ファイル変更時の更新がより高速
 // - CSS変更: ほぼ瞬時
@@ -156,6 +170,7 @@ npm run dev
 ## 型安全性の向上
 
 ### 厳密な型推論
+
 ```typescript
 // ページパラメータの型安全性
 export async function generateMetadata({
@@ -170,6 +185,7 @@ export async function generateMetadata({
 ```
 
 ### コンポーネント型定義
+
 ```typescript
 interface ComponentProps {
   title: string;
@@ -189,6 +205,7 @@ export default function Component({
 ## ビルド最適化
 
 ### 本番ビルドの改善
+
 ```bash
 npm run build
 # ✓ Compiled successfully in 2.9s
@@ -198,6 +215,7 @@ npm run build
 ```
 
 ### バンドル分析
+
 ```typescript
 // 自動的に最適化されるバンドル
 // - Tree shaking改善
@@ -206,6 +224,7 @@ npm run build
 ```
 
 ### Static Generation
+
 ```typescript
 // 静的生成の最適化
 export default function StaticPage() {
@@ -217,18 +236,20 @@ export default function StaticPage() {
 ## セキュリティ強化
 
 ### XSS防御
+
 ```typescript
 // 自動的にサニタイズされる出力
 function SafeComponent({ userInput }: { userInput: string }) {
-  return <div>{userInput}</div>; // 自動エスケープ
+  return <div>{ userInput } < /div>; / / 自動エスケープ;
 }
 ```
 
 ### CSRF保護
+
 ```typescript
 // Server Actionsでの自動CSRF保護
 export async function serverAction(formData: FormData) {
-  'use server';
+  "use server";
   // CSRF トークンが自動検証される
 }
 ```
@@ -236,6 +257,7 @@ export async function serverAction(formData: FormData) {
 ## 学習者向け機能
 
 ### デバッグツール改善
+
 ```typescript
 // React DevToolsとの連携強化
 // - Component tree表示改善
@@ -244,6 +266,7 @@ export async function serverAction(formData: FormData) {
 ```
 
 ### エラーメッセージ改善
+
 ```typescript
 // より分かりやすいエラーメッセージ
 // - 日本語での説明（一部）
@@ -254,6 +277,7 @@ export async function serverAction(formData: FormData) {
 ## 移行時の注意点
 
 ### 互換性確保
+
 ```typescript
 // Pages Routerからの移行
 // - 段階的移行可能
@@ -262,9 +286,10 @@ export async function serverAction(formData: FormData) {
 ```
 
 ### 設定変更点
+
 ```typescript
 // next.config.ts (TypeScript化)
-import type { NextConfig } from 'next';
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   // 新しい設定形式
@@ -276,6 +301,7 @@ export default nextConfig;
 ## ベンチマーク結果
 
 ### ビルド時間比較
+
 ```
 Next.js 15 → 16
 - 開発サーバー起動: 4.2s → 1.3s (69%改善)
@@ -284,6 +310,7 @@ Next.js 15 → 16
 ```
 
 ### バンドルサイズ比較
+
 ```
 - First Load JS: 85.2 kB → 78.4 kB (8%削減)
 - Runtime: 42.3 kB → 38.1 kB (10%削減)
@@ -292,17 +319,19 @@ Next.js 15 → 16
 ## 今後の活用予定
 
 ### 新機能検証
+
 - Server Actions活用
 - Streaming SSR実装
 - Edge Runtime活用
 
 ### パフォーマンス最適化
+
 - Core Web Vitals改善
 - 画像最適化強化
 - フォント読み込み最適化
 
 ---
 
-**作成**: 2025/10/27
-**更新**: Next.js 16.0.0実装完了時
-**参考**: [Next.js 16 Blog](https://nextjs.org/blog), [React 19 RC](https://react.dev/blog)
+**作成**: 2025/10/27 **更新**: Next.js 16.0.0実装完了時 **参考**:
+[Next.js 16 Blog](https://nextjs.org/blog),
+[React 19 RC](https://react.dev/blog)

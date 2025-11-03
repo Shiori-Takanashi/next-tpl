@@ -5,6 +5,7 @@
 ### docs/tpl/point01.md - メインガイド
 
 #### 構成と内容
+
 1. **概要**: テンプレートの目的と特徴
 2. **環境固定化**: Node.js、Docker、依存関係の固定戦略
 3. **クイックスタート**: 4つの開始方法を提示
@@ -14,21 +15,27 @@
 7. **トラブルシューティング**: 実践的な問題解決
 
 #### 特徴的な内容
-```markdown
+
+````markdown
 ### 方法1: 自動セットアップ（最推奨）
+
 ```bash
 git clone https://github.com/your-username/next-tpl.git my-next-project
 cd my-next-project
 ./setup.sh
 ```
+````
 
 ### Dockerイメージ戦略
+
 このテンプレートでは、**Dockerイメージをレジストリにアップロードしません**。理由：
 
 #### ✅ ソースベース配布の利点
+
 - **学習効果**: Dockerビルドプロセスも学習の一部
 - **カスタマイズ自由**: 学習者が自由に変更可能
-```
+
+````
 
 ### docs/tpl/point02.md - バージョン戦略詳細
 
@@ -48,28 +55,33 @@ cd my-next-project
     // ...
   }
 }
-```
+````
 
 ##### 3段階戦略提案
+
 1. **レベル1（超安定版）**: 全て完全固定
 2. **レベル2（バランス版）**: コア固定、ツールはパッチ許可
 3. **レベル3（現実版）**: コア固定、ツールはマイナー許可
 
 ##### 実際のバージョン調査
+
 ```bash
 npm list --depth=0  # 実行結果を反映
 npm outdated        # 更新状況の確認
 ```
 
 **発見**:
+
 - `@types/node` 20.19.23 (current) vs 24.9.1 (latest)
 - TailwindCSS v4は実験的バージョン
 - 他は比較的安定
 
 ##### 最終推奨
+
 **現状維持（コア固定、ツール緩和）が最適**
 
 理由:
+
 - 実証済みの安定構成
 - package-lock.jsonによる完全固定
 - 学習者が環境問題に時間を取られない
@@ -77,23 +89,33 @@ npm outdated        # 更新状況の確認
 ## READMEの全面刷新
 
 ### 構造の最適化
+
 ```markdown
 # Next.js Learning Template (next-tpl)
+
 安定したNext.js学習環境を提供するテンプレートプロジェクト
 
 ## 🚀 Quick Start
+
 ### 最簡単セットアップ
+
 ### Manual Setup
+
 ### Docker版（完全環境固定）
 
 ## 🔒 環境固定化
+
 ## 📁 構成
+
 ## 🐳 Docker戦略
+
 ## 📚 詳細ドキュメント
+
 ## 🎯 使用目的
 ```
 
 ### GitHubテンプレート対応
+
 - バッジとアイコンの活用
 - クリアな使用目的の明示
 - 技術スタックの見える化
@@ -104,6 +126,7 @@ npm outdated        # 更新状況の確認
 ### コミット戦略
 
 #### 包括的なコミット実行
+
 ```bash
 git add .
 git commit -m "feat: Next.js学習テンプレートの完全環境固定化
@@ -122,6 +145,7 @@ Next.jsの学習に専念できる安定したテンプレートを構築"
 ```
 
 #### コミット結果
+
 - **12ファイルの変更**
 - **1,096行の追加、21行の削除**
 - **新規ファイル8個、変更ファイル4個**
@@ -129,6 +153,7 @@ Next.jsの学習に専念できる安定したテンプレートを構築"
 ### .gitignoreの精密化
 
 #### 追加された除外項目
+
 - IDE・エディタファイル
 - OS固有ファイル（macOS、Windows、Linux）
 - 開発関連一時ファイル
@@ -136,6 +161,7 @@ Next.jsの学習に専念できる安定したテンプレートを構築"
 - ログファイル
 
 #### 学習テンプレート特有の考慮
+
 ```ignore
 # Package manager locks (uncomment if you want to ignore them)
 # package-lock.json
@@ -148,14 +174,20 @@ Next.jsの学習に専念できる安定したテンプレートを構築"
 ## ドキュメント間の相互参照
 
 ### ナビゲーション設計
-```markdown
+
+````markdown
 ### 🔗 関連ドキュメント
+
 - [point02.md](./point02.md) - package.jsonバージョン固定戦略の詳細検討
 
 ---
+
 **関連記録**:
+
 - [01-project-overview.md](./01-project-overview.md) - プロジェクト概要と初期セットアップ
-- [02-docker-environment.md](./02-docker-environment.md) - Docker環境構築とバージョン固定
+- [02-docker-environment.md](./02-docker-environment.md) -
+  Docker環境構築とバージョン固定
+
 ```## 学習者向け配慮
 
 ### 段階的学習パス
@@ -204,3 +236,5 @@ Next.jsの学習に専念できる安定したテンプレートを構築"
 **関連記録**:
 - [03-automation-tools.md](./03-automation-tools.md) - 自動化スクリプトと開発支援ツール
 - [05-final-verification.md](./05-final-verification.md) - 最終検証と今後の展開
+```
+````

@@ -5,11 +5,13 @@
 ### tools/ディレクトリの作成
 
 #### 設計思想
+
 - **集約化**: セットアップ関連スクリプトの集中管理
 - **シェル対応**: Bash/Zsh両対応でユーザー環境に最適化
 - **保守性**: 機能別ファイル分割で保守しやすい構造
 
 #### ディレクトリ構成
+
 ```
 tools/
 ├── README.md      # ツールの説明とガイド
@@ -20,6 +22,7 @@ tools/
 ### メインセットアップスクリプト
 
 #### setup（シェル自動選択）
+
 ```bash
 #!/bin/bash
 CURRENT_SHELL=$(basename "$SHELL")
@@ -38,6 +41,7 @@ esac
 ```
 
 **特徴**:
+
 - 現在のシェル環境を自動検出
 - 適切なバージョンを自動選択・実行
 - 未対応シェルではbashにフォールバック
@@ -47,12 +51,14 @@ esac
 ### setup.shの作成
 
 #### 機能概要
+
 - Node.jsバージョンの自動確認
 - Dockerの利用可否判定
 - インタラクティブなセットアップ選択
 - 環境に応じた最適化提案
 
 #### スクリプト構造
+
 ```bash
 #!/bin/bash
 set -e
@@ -82,6 +88,7 @@ echo "3) 両方セットアップ"
 ```
 
 #### セットアップパターン
+
 1. **ローカル環境**: npm install実行
 2. **Docker環境**: docker-compose build実行
 3. **両方**: 順次実行と選択肢提示
@@ -89,6 +96,7 @@ echo "3) 両方セットアップ"
 ### setup.zsh（Zsh版）の実装
 
 #### Zsh固有の機能活用
+
 ```zsh
 #!/bin/zsh
 setopt ERR_EXIT
@@ -103,6 +111,7 @@ fi
 ```
 
 #### Bash版との差異
+
 - **エラーハンドリング**: `setopt ERR_EXIT` vs `set -e`
 - **入力処理**: `vared`コマンドでより洗練された入力
 - **条件分岐**: `[[ ]]` での厳密な条件評価
@@ -111,11 +120,13 @@ fi
 ### Makefile実装
 
 #### 設計思想
+
 - **シンプルなコマンド**: 覚えやすい短縮コマンド
 - **ヘルプ機能**: `make help`で全コマンド表示
 - **学習支援**: 学習用のブランチ管理機能
 
 #### 主要ターゲット
+
 ```makefile
 help:           # ヘルプ表示
 setup:          # インタラクティブセットアップ
@@ -132,6 +143,7 @@ learn-reset:    # mainブランチへの復帰
 ```
 
 #### 学習支援機能
+
 ```makefile
 learn-start:
 	@echo "🎓 新しい学習セッションを開始します..."
@@ -149,6 +161,7 @@ learn-reset:
 ### 追加項目の検討
 
 #### IDE・エディタ対応
+
 ```ignore
 # IDEs and editors
 .vscode/        # Visual Studio Code
@@ -159,6 +172,7 @@ learn-reset:
 ```
 
 #### OS固有ファイル
+
 ```ignore
 # OS generated files
 .DS_Store       # macOS
@@ -171,6 +185,7 @@ Thumbs.db       # Windows
 ```
 
 #### 開発関連
+
 ```ignore
 # Docker
 .docker/
@@ -185,6 +200,7 @@ logs
 ```
 
 #### パッケージマネージャー考慮
+
 ```ignore
 # Package manager locks (uncomment if you want to ignore them)
 # package-lock.json
@@ -197,6 +213,7 @@ logs
 ## package.jsonスクリプト拡張
 
 ### 追加されたスクリプト
+
 ```json
 {
   "scripts": {
@@ -211,6 +228,7 @@ logs
 ```
 
 ### 実行権限設定
+
 ```bash
 chmod +x /home/tani09/allprojects/next-tpl/setup.sh
 ```
@@ -220,6 +238,7 @@ chmod +x /home/tani09/allprojects/next-tpl/setup.sh
 ### 推奨開発パターン
 
 #### パターン1: 個人学習
+
 ```bash
 # 新しい学習プロジェクト開始
 git clone https://github.com/user/next-tpl.git learn-routing
@@ -230,6 +249,7 @@ make dev
 ```
 
 #### パターン2: Docker学習
+
 ```bash
 git clone https://github.com/user/next-tpl.git docker-practice
 cd docker-practice
@@ -237,6 +257,7 @@ make dev-docker
 ```
 
 #### パターン3: 実験環境
+
 ```bash
 git clone https://github.com/user/next-tpl.git experiment
 cd experiment
@@ -245,6 +266,7 @@ make setup
 ```
 
 ### 環境リセット手順
+
 ```bash
 # ローカル環境のリセット
 make clean
@@ -261,12 +283,14 @@ make learn-reset
 ## エラーハンドリングと検証
 
 ### ツール構造による改善点
+
 - **組織化**: スクリプトの論理的配置
 - **選択肢**: シェル環境に応じた最適スクリプト
 - **保守性**: 機能別ファイル分割
 - **拡張性**: 新しいツールの追加が容易
 
 ### セットアップスクリプトの堅牢性
+
 - **Bash版**: `set -e`でエラー時の即座終了
 - **Zsh版**: `setopt ERR_EXIT`でより厳密なエラーハンドリング
 - コマンド存在確認: `command -v`
@@ -274,11 +298,13 @@ make learn-reset
 - ユーザーフレンドリーなメッセージ
 
 ### シェル自動選択の信頼性
+
 - `$SHELL`環境変数による現在シェル検出
 - 未対応シェルでのbashフォールバック
 - execによる適切なプロセス置換
 
 ### Makefileの信頼性
+
 - `.PHONY`ターゲット明示
 - エラー時の適切な終了コード
 - 依存関係の明確化
@@ -286,6 +312,7 @@ make learn-reset
 ## 成果と効果
 
 ### 自動化達成レベル
+
 - ✅ ワンコマンドセットアップ: `./setup`（シェル自動選択）
 - ✅ シェル対応セットアップ: `bash tools/setup.sh` / `zsh tools/setup.zsh`
 - ✅ 簡単開発開始: `make dev`
@@ -293,12 +320,14 @@ make learn-reset
 - ✅ 環境リセット: `make clean`
 
 ### ツール構造による改善
+
 1. **シェル最適化**: ユーザー環境に最適なスクリプト実行
 2. **組織化**: tools/ディレクトリでの論理的配置
 3. **保守性**: 機能別ファイル分割による管理しやすさ
 4. **拡張性**: 新機能追加の容易さ
 
 ### 学習者体験向上
+
 1. **即座開始**: git clone → setup → 開発開始
 2. **環境適応**: Bash/Zsh自動選択でストレスフリー
 3. **選択肢提示**: 環境に応じた最適セットアップ
@@ -306,6 +335,9 @@ make learn-reset
 5. **学習管理**: ブランチでの学習内容整理
 
 ---
+
 **関連記録**:
-- [02-docker-environment.md](./02-docker-environment.md) - Docker環境構築とバージョン固定
+
+- [02-docker-environment.md](./02-docker-environment.md) -
+  Docker環境構築とバージョン固定
 - [04-documentation-strategy.md](./04-documentation-strategy.md) - ドキュメント整備とバージョン戦略

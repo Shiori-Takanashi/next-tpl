@@ -1,6 +1,7 @@
 # 学習カリキュラム設計と実装戦略
 
 ## 概要
+
 Next.jsテンプレートを活用した段階的学習カリキュラムの設計記録
 
 ## 学習者レベル別カリキュラム
@@ -8,6 +9,7 @@ Next.jsテンプレートを活用した段階的学習カリキュラムの設�
 ### 🌱 初級者（0-3ヶ月目標）
 
 #### Week 1-2: 環境構築とNext.js基礎
+
 ```bash
 # 学習目標
 - Next.jsプロジェクトの起動
@@ -16,6 +18,7 @@ Next.jsテンプレートを活用した段階的学習カリキュラムの設�
 ```
 
 **実践課題**:
+
 ```typescript
 // app/hello/page.tsx - 新しいページ作成
 export default function HelloPage() {
@@ -29,6 +32,7 @@ export default function HelloPage() {
 ```
 
 #### Week 3-4: React基礎とコンポーネント
+
 ```typescript
 // components/Button.tsx - 基本コンポーネント
 interface ButtonProps {
@@ -58,6 +62,7 @@ export default function Button({
 ```
 
 #### Week 5-6: State管理とイベント処理
+
 ```typescript
 // app/counter/page.tsx - useState実践
 'use client';
@@ -96,6 +101,7 @@ export default function CounterPage() {
 ```
 
 #### Week 7-8: TypeScript基礎
+
 ```typescript
 // types/user.ts - 型定義の練習
 export interface User {
@@ -105,7 +111,7 @@ export interface User {
   age?: number;
 }
 
-export type UserStatus = 'active' | 'inactive' | 'pending';
+export type UserStatus = "active" | "inactive" | "pending";
 
 export interface UserWithStatus extends User {
   status: UserStatus;
@@ -115,6 +121,7 @@ export interface UserWithStatus extends User {
 ### 🌿 中級者（3-6ヶ月目標）
 
 #### Month 3-4: ルーティングとレイアウト
+
 ```typescript
 // app/blog/layout.tsx - ネストレイアウト
 export default function BlogLayout({
@@ -138,13 +145,14 @@ export default function BlogLayout({
 ```
 
 #### Month 4-5: API統合とデータフェッチ
+
 ```typescript
 // app/api/users/route.ts - API Route実装
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 const users = [
-  { id: 1, name: '田中太郎', email: 'tanaka@example.com' },
-  { id: 2, name: '佐藤花子', email: 'sato@example.com' },
+  { id: 1, name: "田中太郎", email: "tanaka@example.com" },
+  { id: 2, name: "佐藤花子", email: "sato@example.com" },
 ];
 
 export async function GET() {
@@ -187,6 +195,7 @@ export default async function UsersPage() {
 ```
 
 #### Month 5-6: フォーム処理とバリデーション
+
 ```typescript
 // app/contact/page.tsx - フォーム実装
 'use client';
@@ -287,27 +296,29 @@ export default function ContactPage() {
 ### 🌳 上級者（6-12ヶ月目標）
 
 #### Month 6-8: 認証とセキュリティ
+
 ```typescript
 // middleware.ts - 認証ミドルウェア
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get('auth-token');
+  const token = request.cookies.get("auth-token");
 
-  if (!token && request.nextUrl.pathname.startsWith('/dashboard')) {
-    return NextResponse.redirect(new URL('/login', request.url));
+  if (!token && request.nextUrl.pathname.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: '/dashboard/:path*'
+  matcher: "/dashboard/:path*",
 };
 ```
 
 #### Month 8-10: パフォーマンス最適化
+
 ```typescript
 // app/products/page.tsx - Suspenseとストリーミング
 import { Suspense } from 'react';
@@ -346,6 +357,7 @@ export default function ProductsPage() {
 ```
 
 #### Month 10-12: テストと品質保証
+
 ```typescript
 // __tests__/components/Button.test.tsx
 import { render, screen, fireEvent } from '@testing-library/react';
@@ -376,18 +388,21 @@ describe('Button Component', () => {
 ## 実践プロジェクト課題
 
 ### 初級: 個人ブログサイト
+
 - マークダウンブログ
 - 記事一覧・詳細表示
 - カテゴリ分類
 - 検索機能
 
 ### 中級: ECサイト（フロントエンド）
+
 - 商品一覧・詳細
 - ショッピングカート
 - ユーザー認証
 - 決済フロー
 
 ### 上級: 企業向けダッシュボード
+
 - リアルタイムデータ
 - 複雑な状態管理
 - パフォーマンス最適化
@@ -398,18 +413,21 @@ describe('Button Component', () => {
 ### 技術理解度チェックリスト
 
 #### React/Next.js基礎
+
 - [ ] コンポーネントの作成と使用
 - [ ] propsとstateの理解
 - [ ] イベントハンドリング
 - [ ] App Routerの理解
 
 #### TypeScript
+
 - [ ] 基本型の理解
 - [ ] インターフェース定義
 - [ ] 型安全性の活用
 - [ ] ジェネリクスの使用
 
 #### スタイリング
+
 - [ ] TailwindCSSの活用
 - [ ] レスポンシブデザイン
 - [ ] コンポーネントスタイリング
@@ -418,17 +436,20 @@ describe('Button Component', () => {
 ## 学習リソース
 
 ### 公式ドキュメント
+
 - [Next.js Documentation](https://nextjs.org/docs)
 - [React Documentation](https://react.dev/)
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 - [TailwindCSS Documentation](https://tailwindcss.com/docs)
 
 ### 推奨書籍
+
 - 「Reactハンズオンラーニング」
 - 「TypeScript入門」
 - 「モダンJavaScript入門」
 
 ### オンライン学習
+
 - TypeScript公式チュートリアル
 - React公式チュートリアル
 - Next.js Learn コース
@@ -436,18 +457,19 @@ describe('Button Component', () => {
 ## メンターシップ体制
 
 ### コードレビュー観点
+
 1. **コード品質**: 可読性、保守性
 2. **TypeScript活用**: 型安全性の確保
 3. **パフォーマンス**: 最適化の実装
 4. **ベストプラクティス**: 業界標準の遵守
 
 ### 定期チェックポイント
+
 - 月次: 学習進捗確認
 - 隔週: コードレビュー
 - 週次: 質問・相談セッション
 
 ---
 
-**作成**: 2025/10/27
-**対象**: Next.js学習者全レベル
+**作成**: 2025/10/27 **対象**: Next.js学習者全レベル
 **更新**: カリキュラム改善時随時

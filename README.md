@@ -2,23 +2,27 @@
 
 🎌 **日本語最適化済み** | モダンで美しいデザイン | 安定した学習環境
 
-最新のNext.js + React + TypeScript + TailwindCSS v4を使用した、日本語環境に最適化された学習テンプレートです。
+最新のNext.js + React + TypeScript + TailwindCSS
+v4を使用した、日本語環境に最適化された学習テンプレートです。
 
 ## ✨ 特徴
 
 ### � モダンデザイン
+
 - **グラスモーフィズム効果**: 美しい半透明レイヤーデザイン
 - **スムーズアニメーション**: fade-in、slide-inエフェクト
 - **レスポンシブ対応**: モバイルから4Kまで完全対応
 - **ダークモード対応**: システム設定に自動追従
 
 ### 🇯🇵 日本語最適化
+
 - **日本語フォント**: Noto Sans JP（Web最適化済み）
 - **プログラミング用フォント**: JetBrains Mono（日本語コメント対応）
 - **日本語タイポグラフィ**: 適切な行間・字間設定
 - **ロケール設定**: 完全日本語環境
 
 ### 🚀 最新技術スタック
+
 - **Next.js 16.0.0**: App Router + React Server Components
 - **React 19.2.0**: 最新機能フル活用
 - **TailwindCSS v4**: カスタムデザインシステム
@@ -27,6 +31,7 @@
 ## 🚀 Quick Start
 
 ### 最簡単セットアップ
+
 ```bash
 # テンプレートをクローン
 git clone https://github.com/your-username/next-tpl.git my-next-project
@@ -40,6 +45,7 @@ cd my-next-project
 ```
 
 ### Manual Setup
+
 ```bash
 # テンプレートをクローン
 git clone https://github.com/your-username/next-tpl.git my-next-project
@@ -54,6 +60,7 @@ npm run dev
 ```
 
 ### Docker版（完全環境固定）
+
 ```bash
 git clone https://github.com/your-username/next-tpl.git my-next-project
 cd my-next-project
@@ -117,10 +124,12 @@ next-tpl/
 ## 📚 詳細ドキュメント
 
 ### 学習者向け
+
 - [`docs/tpl/point01.md`](./docs/tpl/point01.md) - 包括的使用ガイド
 - [`docs/tpl/point02.md`](./docs/tpl/point02.md) - バージョン固定戦略
 
 ### 開発者向け
+
 - [`docs/development/README.md`](./docs/development/README.md) - 開発記録概要
 - [`tools/README.md`](./tools/README.md) - 開発ツール完全ガイド
 - [`docs/development/23-tools-extension.md`](./docs/development/23-tools-extension.md) - ツール拡張実装記録
@@ -130,6 +139,7 @@ next-tpl/
 学習から本番デプロイまでをカバーする包括的な開発支援ツール群：
 
 ### 基本操作
+
 ```bash
 # プロジェクトセットアップ
 ./setup                    # 自動環境構築
@@ -156,6 +166,7 @@ next-tpl/
 ```
 
 ### Makefileコマンド
+
 ```bash
 # 基本コマンド
 make help          # 全コマンド表示
@@ -170,6 +181,7 @@ make learn-reset   # mainブランチに戻る
 ```
 
 ### 高度なツールコマンド
+
 ```bash
 # 環境リセット
 ./tools/dev-reset.zsh --soft      # ビルド成果物のみ削除
@@ -187,6 +199,7 @@ make learn-reset   # mainブランチに戻る
 不要なファイルを自動削除する高機能スクリプトを提供：
 
 ### 削除対象
+
 - **ビルド成果物**: `.next/`, `out/`, `build/`
 - **一時ファイル**: `*.tmp`, `*.log`, `logs/`
 - **OS生成ファイル**: `.DS_Store`, `Thumbs.db`
@@ -194,6 +207,7 @@ make learn-reset   # mainブランチに戻る
 - **キャッシュファイル**: `.eslintcache`, `*.tsbuildinfo`
 
 ### 使用例
+
 ```bash
 # 削除対象確認（安全）
 ./tools/cleanup.zsh --dry-run

@@ -15,10 +15,19 @@
 ## 📦 package.json 最適化
 
 ### 変更内容
+
 ```json
 {
   "description": "Next.js 学習テンプレート - Docker環境とセットアップ自動化付き",
-  "keywords": ["nextjs", "react", "typescript", "tailwindcss", "docker", "template", "learning"],
+  "keywords": [
+    "nextjs",
+    "react",
+    "typescript",
+    "tailwindcss",
+    "docker",
+    "template",
+    "learning"
+  ],
   "author": "Your Name <your.email@example.com>",
   "license": "MIT",
   "repository": {
@@ -33,6 +42,7 @@
 ```
 
 ### 追加されたスクリプト
+
 - `lint:fix`: ESLintエラーの自動修正
 - `type-check`: TypeScript型チェック（ビルドなし）
 - `docker:dev:bg`: Docker開発サーバーのバックグラウンド起動
@@ -40,6 +50,7 @@
 - `clean:docker`: Docker環境のクリーンアップ
 
 ### 意図・効果
+
 - GitHubテンプレートリポジトリとして適切なメタデータ
 - 学習者が検索で発見しやすいキーワード設定
 - 開発フローに応じた豊富なスクリプト提供
@@ -47,11 +58,13 @@
 ## 🔧 ESLint設定の学習者向け最適化
 
 ### 変更前の課題
+
 - 複雑なNext.js設定で初学者には理解困難
 - コメントが少なく設定意図が不明
 - 厳密すぎるルールで学習の妨げになる可能性
 
 ### 最適化内容
+
 ```javascript
 /**
  * ESLint設定ファイル
@@ -77,12 +90,13 @@ const eslintConfig = defineConfig([
       // 学習に役立つルール
       "no-console": "warn", // console.logの使用を警告
       "prefer-const": "error", // constを使える場合は使用を強制
-    }
-  }
+    },
+  },
 ]);
 ```
 
 ### 効果
+
 - 学習者にとって理解しやすい構成
 - 段階的にルールを厳しくできる拡張性
 - 学習に適した警告レベルの調整
@@ -92,29 +106,31 @@ const eslintConfig = defineConfig([
 ### `app/example/page.tsx` の特徴
 
 #### 1. React Hooks の実践例
+
 ```typescript
 // useState Hook - 状態管理の基本
 const [state, setState] = useState<AppState>({
   count: 0,
-  message: '',
-  isLoading: false
+  message: "",
+  isLoading: false,
 });
 
 // useEffect Hook - 副作用の管理
 useEffect(() => {
-  console.log('ExamplePageがマウントされました');
+  console.log("ExamplePageがマウントされました");
   setState(prev => ({
     ...prev,
-    message: 'Next.js学習テンプレートへようこそ！'
+    message: "Next.js学習テンプレートへようこそ！",
   }));
 
   return () => {
-    console.log('ExamplePageがアンマウントされます');
+    console.log("ExamplePageがアンマウントされます");
   };
 }, []);
 ```
 
 #### 2. TypeScript型定義の実例
+
 ```typescript
 // Props型の定義例
 interface CounterProps {
@@ -130,16 +146,17 @@ interface AppState {
 ```
 
 #### 3. 非同期処理とエラーハンドリング
+
 ```typescript
 const handleAsyncAction = async () => {
   setState(prev => ({ ...prev, isLoading: true }));
 
   try {
     await new Promise(resolve => setTimeout(resolve, 1000));
-    handleMessageChange('非同期処理が完了しました！');
+    handleMessageChange("非同期処理が完了しました！");
   } catch (error) {
-    console.error('エラーが発生しました:', error);
-    handleMessageChange('エラーが発生しました');
+    console.error("エラーが発生しました:", error);
+    handleMessageChange("エラーが発生しました");
   } finally {
     setState(prev => ({ ...prev, isLoading: false }));
   }
@@ -147,12 +164,14 @@ const handleAsyncAction = async () => {
 ```
 
 #### 4. TailwindCSS実践スタイリング
+
 - レスポンシブデザイン（`md:grid-cols-2`）
 - ホバーエフェクト（`hover:bg-blue-600`）
 - 状態に応じたスタイル（`disabled:opacity-50`）
 - グラデーション背景（`bg-linear-to-br`）
 
 ### 学習価値
+
 - **即座に動作確認**: ブラウザで直接操作可能
 - **段階的学習**: 基本から応用まで網羅
 - **実践的パターン**: 実際のプロジェクトで使用する形式
@@ -163,6 +182,7 @@ const handleAsyncAction = async () => {
 ### `.env.example` の構成
 
 #### 1. アプリケーション設定
+
 ```env
 NEXT_PUBLIC_APP_NAME="Next.js学習テンプレート"
 NEXT_PUBLIC_APP_VERSION="0.1.0"
@@ -170,6 +190,7 @@ NEXT_PUBLIC_IS_DEVELOPMENT="true"
 ```
 
 #### 2. API設定例
+
 ```env
 NEXT_PUBLIC_API_URL="https://jsonplaceholder.typicode.com"
 API_URL="http://localhost:3000/api"
@@ -177,6 +198,7 @@ API_SECRET_KEY="your-secret-key-here"
 ```
 
 #### 3. 外部サービス連携例
+
 - データベース接続（PostgreSQL, MongoDB）
 - 認証サービス（NextAuth.js, Google OAuth）
 - 決済システム（Stripe）
@@ -185,6 +207,7 @@ API_SECRET_KEY="your-secret-key-here"
 - アナリティクス（Google Analytics）
 
 ### セキュリティ配慮
+
 - `NEXT_PUBLIC_` プレフィックスの適切な使い分け
 - 機密情報の取り扱い注意書き
 - 本番環境での設定変更指示
@@ -192,12 +215,14 @@ API_SECRET_KEY="your-secret-key-here"
 ## 🎨 ホームページのUI/UX最適化
 
 ### デザイン改善
+
 1. **視覚的階層**: グラデーション背景とカード型レイアウト
 2. **ナビゲーション**: サンプルページへの明確な導線
 3. **情報整理**: 特徴、クイックスタート、学習リソースの3段構成
 4. **レスポンシブ**: モバイルフレンドリーなグリッドレイアウト
 
 ### 学習促進要素
+
 - 🚀 **即座に学習開始**: サンプルページへのワンクリックアクセス
 - 📚 **外部リソース**: Next.js、React、TypeScript公式ドキュメントへのリンク
 - 🔗 **視覚的フィードバック**: ホバーエフェクトとトランジション
@@ -206,6 +231,7 @@ API_SECRET_KEY="your-secret-key-here"
 ## 📖 ドキュメント体系の完成
 
 ### development/ ディレクトリ構成
+
 ```
 docs/development/
 ├── README.md                    # 概要とナビゲーション
@@ -219,6 +245,7 @@ docs/development/
 ```
 
 ### ドキュメント間の相互参照
+
 - README.mdからの包括的なナビゲーション
 - 各ドキュメント間のクロスリファレンス
 - ユーザー向けドキュメント（tpl/）との連携
@@ -226,12 +253,14 @@ docs/development/
 ## 🚀 最適化の成果
 
 ### 定量的改善
+
 - **ファイル数**: 34ファイル → 39ファイル（+学習リソース）
 - **ページ数**: 2ページ → 3ページ（+学習サンプル）
 - **スクリプト数**: 7個 → 12個（+開発支援コマンド）
 - **ドキュメント**: 8ファイル → 10ファイル（+最適化記録）
 
 ### 質的改善
+
 1. **学習効果**: 実際に動作するサンプルコードで体験学習
 2. **開発体験**: 豊富なスクリプトとドキュメントで効率向上
 3. **保守性**: 明確な設計方針と拡張指針
@@ -240,18 +269,21 @@ docs/development/
 ## 🔮 今後の拡張可能性
 
 ### 短期拡張案
+
 - [ ] テストフレームワーク統合（Jest, Testing Library）
 - [ ] ストーリーブック導入（コンポーネント開発支援）
 - [ ] API ルート例の追加（/api ディレクトリ）
 - [ ] データベース連携例（Prisma + SQLite）
 
 ### 中期拡張案
+
 - [ ] 認証機能サンプル（NextAuth.js）
 - [ ] 状態管理ライブラリ例（Zustand, Redux Toolkit）
 - [ ] CI/CDパイプライン設定（GitHub Actions）
 - [ ] E2Eテスト環境（Playwright）
 
 ### 長期拡張案
+
 - [ ] マイクロフロントエンド構成例
 - [ ] Next.js以外フレームワーク版（Astro, Remix）
 - [ ] クラウドデプロイテンプレート（Vercel, AWS）
@@ -260,6 +292,7 @@ docs/development/
 ## 📝 学習テンプレートとしての完成度
 
 ### ✅ 達成できた要素
+
 1. **即座に開始**: 1コマンドセットアップ
 2. **環境固定**: Docker + Node.jsバージョン管理
 3. **実践学習**: 動作するサンプルコード
@@ -267,6 +300,7 @@ docs/development/
 5. **拡張性**: 将来の機能追加を考慮した設計
 
 ### 🎯 テンプレートの特徴
+
 - **学習効果最大化**: 理論と実践の両方をカバー
 - **環境統一**: 誰でも同じ環境で学習可能
 - **段階的成長**: 基礎から応用まで対応

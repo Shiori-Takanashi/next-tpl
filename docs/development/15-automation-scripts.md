@@ -1,11 +1,13 @@
 # 自動化スクリプト詳細実装記録
 
 ## 概要
+
 プロジェクトセットアップとメンテナンスの完全自動化実装記録
 
 ## メインセットアップスクリプト
 
 ### シェル自動検出機能 (setup)
+
 ```bash
 #!/bin/bash
 # メインセットアップスクリプト - シェル自動選択
@@ -37,6 +39,7 @@ esac
 ```
 
 ### Zsh専用セットアップ (tools/setup.zsh)
+
 ```zsh
 #!/usr/bin/env zsh
 
@@ -91,6 +94,7 @@ check_node_version() {
 ## クリーンアップスクリプト
 
 ### 高機能クリーンアップ (tools/cleanup.zsh)
+
 ```zsh
 #!/usr/bin/env zsh
 
@@ -184,6 +188,7 @@ execute_cleanup() {
 ## Docker統合スクリプト
 
 ### Docker環境管理
+
 ```bash
 # Makefile統合コマンド
 docker_setup() {
@@ -211,6 +216,7 @@ docker_setup() {
 ## 設定ファイル管理
 
 ### .gitignore自動生成
+
 ```bash
 generate_gitignore() {
     local gitignore_content="# Next.js
@@ -266,6 +272,7 @@ Thumbs.db
 ## パッケージ管理
 
 ### 依存関係インストール自動化
+
 ```bash
 install_dependencies() {
     setup_info "📦 依存関係をインストール中..."
@@ -293,6 +300,7 @@ install_dependencies() {
 ## エラーハンドリング
 
 ### 堅牢なエラー処理
+
 ```zsh
 # エラー時の自動復旧
 error_recovery() {
@@ -326,6 +334,7 @@ trap error_recovery ERR
 ## ログとデバッグ
 
 ### 詳細ログ出力
+
 ```bash
 # ログファイル管理
 LOG_FILE="setup-$(date +%Y%m%d-%H%M%S).log"
@@ -346,18 +355,19 @@ fi
 ## 今後の拡張予定
 
 ### 機能追加計画
+
 - CI/CD統合
 - 自動テスト実行
 - パフォーマンス測定
 - セキュリティスキャン
 
 ### プラットフォーム対応
+
 - Windows PowerShell対応
 - macOS特化最適化
 - Linux ディストリビューション別対応
 
 ---
 
-**作成**: 2025/10/27
-**更新**: 自動化スクリプト完成時
-**技術**: Bash, Zsh, Make, Docker
+**作成**: 2025/10/27 **更新**: 自動化スクリプト完成時 **技術**: Bash, Zsh, Make,
+Docker

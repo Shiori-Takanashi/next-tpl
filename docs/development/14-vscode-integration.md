@@ -1,11 +1,13 @@
 # VS Code統合開発環境構築記録
 
 ## 概要
+
 学習効率最大化のためのVS Code開発環境構築の詳細記録
 
 ## VS Code設定ファイル
 
 ### 基本設定 (.vscode/settings.json)
+
 ```json
 {
   "editor.formatOnSave": true,
@@ -30,6 +32,7 @@
 ```
 
 ### 推奨拡張機能 (.vscode/extensions.json)
+
 ```json
 {
   "recommendations": [
@@ -47,6 +50,7 @@
 ## タスク自動化設定
 
 ### ビルドタスク (.vscode/tasks.json)
+
 ```json
 {
   "version": "2.0.0",
@@ -106,6 +110,7 @@
 ```
 
 ### デバッグ設定 (.vscode/launch.json)
+
 ```json
 {
   "version": "0.2.0",
@@ -138,6 +143,7 @@
 ## 開発効率化設定
 
 ### TailwindCSS IntelliSense最適化
+
 ```json
 // settings.json内
 "tailwindCSS.includeLanguages": {
@@ -151,6 +157,7 @@
 ```
 
 ### TypeScript最適化
+
 ```json
 "typescript.suggest.autoImports": true,
 "typescript.updateImportsOnFileMove.enabled": "always",
@@ -160,6 +167,7 @@
 ## ワークスペース設定
 
 ### マルチルート対応
+
 ```json
 // .vscode/settings.json
 "search.exclude": {
@@ -171,6 +179,7 @@
 ```
 
 ### ファイル監視最適化
+
 ```json
 "files.watcherExclude": {
   "**/.git/objects/**": true,
@@ -183,6 +192,7 @@
 ## 学習支援機能
 
 ### インライン型ヒント
+
 ```json
 "typescript.inlayHints.parameterNames.enabled": "literals",
 "typescript.inlayHints.parameterTypes.enabled": true,
@@ -192,6 +202,7 @@
 ```
 
 ### エラー表示最適化
+
 ```json
 "problems.decorations.enabled": true,
 "problems.showCurrentInStatus": true,
@@ -201,6 +212,7 @@
 ## Git統合設定
 
 ### Git操作最適化
+
 ```json
 "git.autofetch": true,
 "git.confirmSync": false,
@@ -209,6 +221,7 @@
 ```
 
 ### 差分表示設定
+
 ```json
 "diffEditor.ignoreTrimWhitespace": false,
 "diffEditor.renderSideBySide": true,
@@ -218,6 +231,7 @@
 ## パフォーマンス最適化
 
 ### 起動時間短縮
+
 ```json
 "extensions.autoCheckUpdates": false,
 "telemetry.telemetryLevel": "off",
@@ -225,6 +239,7 @@
 ```
 
 ### メモリ使用量最適化
+
 ```json
 "typescript.tsc.autoDetect": "on",
 "typescript.preferences.disableSuggestions": false,
@@ -234,11 +249,13 @@
 ## デバッグ環境
 
 ### ブレークポイント設定
+
 - React コンポーネント内
 - Next.js API ルート
 - カスタムフック内
 
 ### ホットリロード最適化
+
 ```json
 "typescript.preferences.includePackageJsonAutoImports": "on",
 "javascript.preferences.includePackageJsonAutoImports": "on"
@@ -247,12 +264,14 @@
 ## 拡張機能活用
 
 ### 必須拡張機能
+
 1. **TailwindCSS IntelliSense**: クラス補完
 2. **ES7+ React/Redux/React-Native snippets**: React スニペット
 3. **Auto Rename Tag**: HTMLタグ自動リネーム
 4. **Bracket Pair Colorizer**: 括弧色分け
 
 ### 学習支援拡張機能
+
 1. **Error Lens**: インラインエラー表示
 2. **Thunder Client**: API テスト
 3. **Git Graph**: Git履歴可視化
@@ -261,6 +280,7 @@
 ## キーボードショートカット
 
 ### カスタムショートカット
+
 ```json
 // keybindings.json
 [
@@ -280,17 +300,18 @@
 ## 今後の改善予定
 
 ### 追加設定
+
 - Prettier統合最適化
 - Husky pre-commit hook設定
 - テスト環境統合
 
 ### 学習効率化
+
 - コードスニペット拡充
 - Live Share設定
 - Remote Development対応
 
 ---
 
-**作成**: 2025/10/27
-**更新**: VS Code統合完了時
-**対象**: Next.js学習者向け最適化環境
+**作成**: 2025/10/27 **更新**: VS Code統合完了時 **対象**:
+Next.js学習者向け最適化環境
