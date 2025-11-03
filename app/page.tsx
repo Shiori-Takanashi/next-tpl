@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5">
       {/* Header */}
-      <header className="glass fixed top-0 left-0 right-0 z-50 border-b">
+      <header className="bg-background/98 backdrop-blur-md border-b border-border/60 fixed top-0 left-0 right-0 z-50 shadow-sm">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <h1 className="text-xl font-bold">Next.js テンプレート</h1>
           <div className="flex items-center space-x-3">
@@ -86,11 +86,11 @@ export default function Home() {
             </div>
 
             <div className="grid md:grid-cols-2 gap-8">
-              <div className="glass rounded-lg p-6">
+              <div className="bg-card/98 border border-border/60 rounded-lg p-6 shadow-sm">
                 <h3 className="text-lg font-semibold text-primary mb-4">
                   💻 ローカル環境
                 </h3>
-                <div className="bg-muted/50 rounded-md p-4 font-mono text-sm">
+                <div className="bg-muted/60 rounded-md p-4 font-mono text-sm border border-border/40">
                   <div className="text-muted-foreground mb-1"># テンプレートクローン</div>
                   <div>git clone &lt;repository&gt;</div>
                   <div>cd next-tpl</div>
@@ -99,11 +99,11 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="glass rounded-lg p-6">
+              <div className="bg-card/98 border border-border/60 rounded-lg p-6 shadow-sm">
                 <h3 className="text-lg font-semibold text-green-600 mb-4">
                   🐳 Docker環境
                 </h3>
-                <div className="bg-muted/50 rounded-md p-4 font-mono text-sm">
+                <div className="bg-muted/60 rounded-md p-4 font-mono text-sm border border-border/40">
                   <div className="text-muted-foreground mb-1"># Docker開発環境</div>
                   <div className="text-green-600 font-semibold">make dev-docker</div>
                   <div className="text-muted-foreground mt-3 mb-1"># または</div>
