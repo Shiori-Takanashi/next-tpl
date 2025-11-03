@@ -32,7 +32,10 @@
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "type-check": "tsc --noEmit",
+    "check-all": "npm run type-check && npm run lint && npm run format:check",
     "docker:dev": "docker-compose up next-tpl-dev",
     "docker:dev:bg": "docker-compose up -d next-tpl-dev",
     "docker:build": "docker build -t next-tpl .",
@@ -45,18 +48,20 @@
     "npm": ">=10.0.0"
   },
   "dependencies": {
+    "next": "16.0.0",
     "react": "19.2.0",
-    "react-dom": "19.2.0",
-    "next": "16.0.0"
+    "react-dom": "19.2.0"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
-    "eslint-config-next": "16.0.0"
+    "eslint-config-next": "16.0.0",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.5.14",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
