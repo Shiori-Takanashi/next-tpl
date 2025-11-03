@@ -6,7 +6,7 @@ import StatsSection from '@/components/StatsSection';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5">
+    <div className="min-h-screen bg-linear-to-br from-background via-background to-accent/5">
       {/* Header */}
       <header className="bg-background/98 backdrop-blur-md border-b border-border/60 fixed top-0 left-0 right-0 z-50 shadow-sm">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
@@ -28,7 +28,7 @@ export default function Home() {
               学習最適化済み
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
               Next.js 学習テンプレート
             </h1>
 

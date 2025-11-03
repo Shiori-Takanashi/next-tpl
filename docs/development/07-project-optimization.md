@@ -150,7 +150,7 @@ const handleAsyncAction = async () => {
 - レスポンシブデザイン（`md:grid-cols-2`）
 - ホバーエフェクト（`hover:bg-blue-600`）
 - 状態に応じたスタイル（`disabled:opacity-50`）
-- グラデーション背景（`bg-gradient-to-br`）
+- グラデーション背景（`bg-linear-to-br`）
 
 ### 学習価値
 - **即座に動作確認**: ブラウザで直接操作可能

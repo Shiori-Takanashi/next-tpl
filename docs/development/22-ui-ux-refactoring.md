@@ -92,7 +92,7 @@
 ```typescript
 // Before: 重複するカード構造
 <div className="glass rounded-xl p-8 transition-all duration-300 hover:shadow-lg hover:scale-105">
-  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white text-2xl mb-6 mx-auto">
+  <div className="w-16 h-16 bg-linear-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white text-2xl mb-6 mx-auto">
     🔒
   </div>
   <h3 className="text-xl font-bold mb-4">完全環境固定</h3>
@@ -196,7 +196,7 @@ const sizes = {
 ### コード理解の容易性
 ```typescript
 // Before: 何をしているか理解困難
-<div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600...">
+<div className="w-16 h-16 bg-linear-to-br from-blue-500 to-blue-600...">
 
 // After: 意図が明確
 <FeatureCard icon="🔒" title="完全環境固定" description="..." />
@@ -317,8 +317,8 @@ npm run type-check
 
 ---
 
-**作成**: 2025/11/04  
-**実施者**: UI/UXリファクタリングチーム  
+**作成**: 2025/11/04
+**実施者**: UI/UXリファクタリングチーム
 **対象**: 保守性・学習効果の向上
 
 **結論**: モジュラー設計により、学習しやすく保守しやすいコードベースへの進化を達成

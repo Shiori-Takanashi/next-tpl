@@ -257,6 +257,6 @@ Error: Event handlers cannot be passed to Client Component props.
 
 ---
 
-**作成**: 2025/11/04  
-**更新**: コンポーネントシステム完成時  
+**作成**: 2025/11/04
+**更新**: コンポーネントシステム完成時
 **対象**: React/Next.js学習者向け実践教材
