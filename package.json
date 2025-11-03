@@ -38,8 +38,11 @@
     "check-all": "npm run type-check && npm run lint && npm run format:check",
     "docker:dev": "docker-compose up next-tpl-dev",
     "docker:dev:bg": "docker-compose up -d next-tpl-dev",
+    "docker:prod": "docker-compose -f docker-compose.prod.yml up",
+    "docker:prod:bg": "docker-compose -f docker-compose.prod.yml up -d",
     "docker:build": "docker build -t next-tpl .",
     "docker:run": "docker run -p 3000:3000 next-tpl",
+    "health": "curl -f http://localhost:3000/api/health || exit 1",
     "clean": "rm -rf .next node_modules package-lock.json",
     "clean:docker": "docker-compose down && docker system prune -f"
   },
