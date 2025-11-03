@@ -5,7 +5,7 @@ interface CardProps {
 
 export default function Card({ children, className = '' }: CardProps) {
   return (
-    <div className={`bg-card/95 backdrop-blur-sm border border-border/60 rounded-lg p-6 shadow-sm ${className}`}>
+    <div className={`bg-white/95 backdrop-blur-sm border border-gray-200 rounded-lg p-6 shadow-sm ${className}`}>
       {children}
     </div>
   );
@@ -29,7 +29,7 @@ export function CardTitle({ children, className = '' }: CardProps) {
 
 export function CardDescription({ children, className = '' }: CardProps) {
   return (
-    <p className={`text-sm text-muted-foreground ${className}`}>
+    <p className={`text-sm text-gray-600 ${className}`}>
       {children}
     </p>
   );

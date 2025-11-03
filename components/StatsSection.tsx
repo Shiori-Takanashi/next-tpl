@@ -8,8 +8,8 @@ interface StatItemProps {
 function StatItem({ value, label }: StatItemProps) {
   return (
     <div className="text-center">
-      <div className="text-2xl md:text-3xl font-bold text-primary mb-1">{value}</div>
-      <div className="text-sm text-muted-foreground">{label}</div>
+      <div className="text-2xl md:text-3xl font-bold text-blue-600 mb-1">{value}</div>
+      <div className="text-sm text-gray-600">{label}</div>
     </div>
   );
 }
