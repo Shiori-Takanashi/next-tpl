@@ -324,7 +324,7 @@ jobs:
           WIKI_URL="https://github.com/${{ github.repository }}/wiki"
           LATEST_COMMIT=$(git log -1 --format="%h %s")
 
-          echo "� === Detailed Wiki Sync Summary ===" 
+          echo "� === Detailed Wiki Sync Summary ==="
           echo "🎯 Repository: ${{ github.repository }}"
           echo "🔗 Wiki URL: $WIKI_URL"
           echo "📊 Statistics:"
@@ -353,7 +353,7 @@ jobs:
           - ⏰ **Sync time**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
 
           ### 🎯 Access Your Wiki
-          - [📖 **View Wiki**](${WIKI_URL}) 
+          - [📖 **View Wiki**](${WIKI_URL})
           - [🏠 **Wiki Home**](${WIKI_URL}/Home)
           - [📋 **Complete Index**](${WIKI_URL}/README)
 
