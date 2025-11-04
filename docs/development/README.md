@@ -293,6 +293,7 @@ docs/tpl/
 | 2025-11-04 | 24-ci-workflow-modularization.md 追加（CIワークフローモジュール化）          |
 | 2025-11-04 | 25-development-standards.md 追加（開発環境標準化：EditorConfig/Prettier等）  |
 | 2025-11-04 | 20-production-deployment.md 更新（環境変数管理の詳細セクション追加）         |
+| 2025-11-05 | 26-github-wiki-migration-strategy.md 追加（Wiki移行戦略）                   |
 
 ---
 

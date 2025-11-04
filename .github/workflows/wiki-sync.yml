@@ -27,26 +27,37 @@ jobs:
         id: wiki-check
         run: |
           WIKI_URL="https://github.com/${{ github.repository }}.wiki.git"
+          echo "Checking Wiki repository: $WIKI_URL"
           if git ls-remote "$WIKI_URL" &>/dev/null; then
             echo "exists=true" >> $GITHUB_OUTPUT
+            echo "✅ Wiki repository exists"
           else
             echo "exists=false" >> $GITHUB_OUTPUT
+            echo "❌ Wiki repository not found"
           fi
 
       - name: Clone or initialize Wiki
         run: |
           WIKI_URL="https://github.com/${{ github.repository }}.wiki.git"
-
+          
+          echo "🔄 Starting Wiki sync process..."
+          echo "Repository: ${{ github.repository }}"
+          echo "Wiki URL: $WIKI_URL"
+          
           if [[ "${{ steps.wiki-check.outputs.exists }}" == "true" ]]; then
             echo "📖 Cloning existing Wiki..."
             git clone "$WIKI_URL" wiki-repo
+            cd wiki-repo
+            echo "📋 Current Wiki contents:"
+            ls -la *.md 2>/dev/null || echo "No markdown files found"
+            cd ..
           else
             echo "🆕 Initializing new Wiki..."
             mkdir wiki-repo
             cd wiki-repo
             git init
             git remote add origin "$WIKI_URL"
-
+            
             # Create initial Home page
             cat > Home.md << 'EOF'
           # Next.js Learning Template - Development Wiki
@@ -81,17 +92,20 @@ jobs:
       - name: Sync documentation files
         run: |
           cd wiki-repo
-
+          
+          echo "📝 Starting documentation sync..."
+          echo "📊 Source files count: $(find ../docs/development -name "*.md" | wc -l)"
+          
           # Remove existing docs (except special Wiki files)
           find . -name "*.md" -not -name "Home.md" -not -name "_*.md" -delete
-
+          
           echo "📝 Syncing documentation files..."
-
+          
           # Copy all markdown files from docs/development
           find ../docs/development -name "*.md" | while read -r source_file; do
             basename_file=$(basename "$source_file")
             echo "Syncing: $basename_file"
-
+            
             # Copy file with metadata
             {
               echo "<!-- Auto-synced from docs/development/$basename_file -->"
@@ -101,8 +115,10 @@ jobs:
               cat "$source_file"
             } > "$basename_file"
           done
-
-      - name: Update Wiki sidebar
+          
+          echo "✅ Sync completed"
+          echo "📋 Wiki files after sync:"
+          ls -la *.md      - name: Update Wiki sidebar
         run: |
           cd wiki-repo
 
