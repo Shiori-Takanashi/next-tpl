@@ -60,6 +60,10 @@
 - [24-ci-workflow-modularization.md](./24-ci-workflow-modularization.md) - GitHub Actions CIワークフローのモジュール化実装記録
 - [25-development-standards.md](./25-development-standards.md) - 開発環境標準化実装記録（EditorConfig、Prettier、GitHub管理テンプレート）
 
+### プロジェクト管理・移行戦略
+
+- [26-github-wiki-migration-strategy.md](./26-github-wiki-migration-strategy.md) - GitHub Wiki自動移行戦略とリポジトリ軽量化
+
 ## 🎯 開発ガイド
 
 ### テンプレートのカスタマイズ

@@ -72,13 +72,29 @@ logs
 tmp/
 temp/
 
+# Cache directories
+.mypy_cache/
+.pytest_cache/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Python virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# Development tools cache
+.eslintcache
+.stylelintcache
+
 # Package manager locks (uncomment if you want to ignore them)
 # package-lock.json
 # yarn.lock
 # pnpm-lock.yaml
 
-# 個人用スクリプト
-pytree
-
-# 個人用tree
-trees
+# Wiki移行用一時ファイル
+wiki-temp/
+*.wiki.backup
