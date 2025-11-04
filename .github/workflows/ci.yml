@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI Pipeline
 
 on:
   push:
@@ -7,143 +7,38 @@ on:
     branches: [main, latest]
 
 jobs:
-  # 依存関係とキャッシュのセットアップ
   setup:
-    runs-on: ubuntu-latest
-    outputs:
-      node-version: ${{ steps.node.outputs.version }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    uses: ./.github/workflows/ci-setup.yml
 
-      - name: Read Node.js version
-        id: node
-        run: echo "version=$(cat .nvmrc)" >> $GITHUB_OUTPUT
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
-
-  # リント & フォーマットチェック
   lint:
     needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    uses: ./.github/workflows/ci-lint.yml
+    with:
+      cache-key: ${{ needs.setup.outputs.cache-key }}
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ needs.setup.outputs.node-version }}
-          cache: "npm"
-
-      - name: Restore cache
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run ESLint
-        run: npm run lint
-
-      - name: Check Prettier formatting
-        run: npm run format:check
-
-  # TypeScript型チェック
   type-check:
     needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    uses: ./.github/workflows/ci-type-check.yml
+    with:
+      cache-key: ${{ needs.setup.outputs.cache-key }}
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ needs.setup.outputs.node-version }}
-          cache: "npm"
-
-      - name: Restore cache
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run type check
-        run: npm run type-check
-
-  # ビルドテスト
   build:
     needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    uses: ./.github/workflows/ci-build.yml
+    with:
+      cache-key: ${{ needs.setup.outputs.cache-key }}
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ needs.setup.outputs.node-version }}
-          cache: "npm"
-
-      - name: Restore cache
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build application
-        run: npm run build
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-output
-          path: .next/
-
-  # セキュリティ監査
   security:
     needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    uses: ./.github/workflows/ci-security.yml
+    with:
+      cache-key: ${{ needs.setup.outputs.cache-key }}
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ needs.setup.outputs.node-version }}
-          cache: "npm"
-
-      - name: Run security audit
-        run: npm audit --audit-level=moderate
-
-  # 最終チェック
   final-check:
     needs: [lint, type-check, build, security]
     runs-on: ubuntu-latest
     if: always()
+
     steps:
       - name: Check all jobs
         run: |
@@ -151,9 +46,9 @@ jobs:
                 "${{ needs.type-check.result }}" == "success" &&
                 "${{ needs.build.result }}" == "success" &&
                 "${{ needs.security.result }}" == "success" ]]; then
-            echo "✅ All checks passed!"
+            echo "✅ All CI checks passed!"
             exit 0
           else
-            echo "❌ Some checks failed"
+            echo "❌ Some CI checks failed"
             exit 1
           fi

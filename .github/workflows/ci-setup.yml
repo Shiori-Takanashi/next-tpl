@@ -1,0 +1,47 @@
+name: CI - Setup & Dependencies
+
+on:
+  workflow_call:
+    outputs:
+      node-version:
+        description: "Node.js version from .nvmrc"
+        value: ${{ jobs.setup.outputs.node-version }}
+      cache-key:
+        description: "Cache key for node_modules"
+        value: ${{ jobs.setup.outputs.cache-key }}
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      node-version: ${{ steps.node.outputs.version }}
+      cache-key: ${{ steps.cache.outputs.cache-key }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Read Node.js version
+        id: node
+        run: echo "version=$(cat .nvmrc)" >> $GITHUB_OUTPUT
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate cache key
+        id: cache
+        run: |
+          CACHE_KEY="${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}"
+          echo "cache-key=$CACHE_KEY" >> $GITHUB_OUTPUT
+
+      - name: Cache node_modules
+        uses: actions/cache/save@v3
+        with:
+          path: node_modules
+          key: ${{ steps.cache.outputs.cache-key }}
