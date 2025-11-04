@@ -35,6 +35,7 @@
 - [18-error-handling-troubleshooting.md](./18-error-handling-troubleshooting.md) - エラー処理とトラブルシューティング実装記録
 - [19-learning-curriculum.md](./19-learning-curriculum.md) - 学習カリキュラム設計と実装戦略
 - [20-production-deployment.md](./20-production-deployment.md) - プロダクション環境デプロイ戦略
+- [21-ci-workflow-improvements.md](./21-ci-workflow-improvements.md) - CI/CD ワークフロー改善と Issue 管理プロセス
 
 ## 🎯 開発ガイド
 
@@ -150,7 +151,7 @@ make dev
 
 ### 今後の予定
 - [ ] テストフレームワークの統合
-- [ ] CI/CDパイプラインの追加
+- [x] CI/CDパイプラインの追加（Issue #1, #2 で対応完了）
 - [ ] より多くの学習リソースの組み込み
 - [ ] プラグイン機能の検討
 
@@ -239,6 +240,7 @@ docs/tpl/
 |------|----------|
 | 2025-10-26 | 初回実装完了、全6記録作成 |
 | 2025-10-26 | ファイル構造改善、development/ディレクトリ化 |
+| 2025-11-04 | CI/CD パイプライン追加、Issue 管理プロセス記録 (Issue #1, #2) |
 
 ---
 
