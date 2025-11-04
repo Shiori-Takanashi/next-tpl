@@ -76,3 +76,9 @@ temp/
 # package-lock.json
 # yarn.lock
 # pnpm-lock.yaml
+
+# 個人用スクリプト
+pytree
+
+# 個人用tree
+trees
