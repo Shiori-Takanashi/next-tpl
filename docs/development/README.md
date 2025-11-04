@@ -63,6 +63,7 @@
 ### プロジェクト管理・移行戦略
 
 - [26-github-wiki-migration-strategy.md](./26-github-wiki-migration-strategy.md) - GitHub Wiki自動移行戦略とリポジトリ軽量化
+- [27-github-actions-workflow-separation.md](./27-github-actions-workflow-separation.md) - GitHub Actions ワークフロー責任分離設計
 
 ## 🎯 開発ガイド
 

@@ -1,4 +1,4 @@
-name: Auto Wiki Sync
+name: Wiki Documentation Sync
 
 on:
   push:
@@ -6,9 +6,16 @@ on:
     paths:
       - 'docs/development/**'
   workflow_dispatch:
+    inputs:
+      force_sync:
+        description: 'Force sync all documentation'
+        required: false
+        default: 'false'
+        type: boolean
 
 jobs:
-  sync-to-wiki:
+  sync-documentation:
+    name: Sync docs to Wiki
     runs-on: ubuntu-latest
     if: github.repository == 'Shiori-Takanashi/next-tpl'
 
