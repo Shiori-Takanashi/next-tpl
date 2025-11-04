@@ -2,6 +2,8 @@
 
 このディレクトリには、Next.js学習テンプレートの開発・保守に関する完全なドキュメントが格納されています。
 
+> 🚀 **Wiki自動同期**: このディレクトリの変更は自動的に[GitHub Wiki](https://github.com/Shiori-Takanashi/next-tpl/wiki)に同期されます
+
 ## 📋 ドキュメント一覧
 
 ### プロジェクト基盤
