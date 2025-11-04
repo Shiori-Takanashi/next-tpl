@@ -101,31 +101,72 @@ jobs:
           cd wiki-repo
 
           echo "📝 Starting documentation sync..."
-          echo "📊 Source files count: $(find ../docs/development -name "*.md" | wc -l)"
+          SOURCE_FILES=$(find ../docs/development -name "*.md" | sort)
+          SOURCE_COUNT=$(echo "$SOURCE_FILES" | wc -l)
+          echo "📊 Source files count: $SOURCE_COUNT"
+          echo "📁 Source files:"
+          echo "$SOURCE_FILES" | sed 's|../docs/development/||g'
 
           # Remove existing docs (except special Wiki files)
           find . -name "*.md" -not -name "Home.md" -not -name "_*.md" -delete
 
           echo "📝 Syncing documentation files..."
 
+          # Counter for successful copies
+          SUCCESS_COUNT=0
+
           # Copy all markdown files from docs/development
-          find ../docs/development -name "*.md" | while read -r source_file; do
-            basename_file=$(basename "$source_file")
-            echo "Syncing: $basename_file"
+          while IFS= read -r source_file; do
+            if [[ -f "$source_file" ]]; then
+              basename_file=$(basename "$source_file")
+              echo "📄 Syncing: $basename_file"
 
-            # Copy file with metadata
-            {
-              echo "<!-- Auto-synced from docs/development/$basename_file -->"
-              echo "<!-- Last sync: $(date -u '+%Y-%m-%d %H:%M:%S UTC') -->"
-              echo "<!-- Commit: ${{ github.sha }} -->"
-              echo ""
-              cat "$source_file"
-            } > "$basename_file"
-          done
+              # Verify source file is readable
+              if [[ -r "$source_file" ]]; then
+                # Copy file with metadata
+                {
+                  echo "<!-- Auto-synced from docs/development/$basename_file -->"
+                  echo "<!-- Last sync: $(date -u '+%Y-%m-%d %H:%M:%S UTC') -->"
+                  echo "<!-- Commit: ${{ github.sha }} -->"
+                  echo ""
+                  cat "$source_file"
+                } > "$basename_file"
 
-          echo "✅ Sync completed"
-          echo "📋 Wiki files after sync:"
-          ls -la *.md
+                # Verify the copy was successful
+                if [[ -f "$basename_file" && -s "$basename_file" ]]; then
+                  SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
+                  echo "  ✅ Successfully copied $basename_file"
+                else
+                  echo "  ❌ Failed to copy $basename_file (empty or missing)"
+                fi
+              else
+                echo "  ❌ Cannot read source file: $source_file"
+              fi
+            else
+              echo "  ❌ Source file not found: $source_file"
+            fi
+          done <<< "$SOURCE_FILES"
+
+          echo ""
+          echo "📊 Sync Results:"
+          echo "  📁 Source files: $SOURCE_COUNT"
+          echo "  ✅ Successfully copied: $SUCCESS_COUNT"
+          echo "  ❌ Failed: $((SOURCE_COUNT - SUCCESS_COUNT))"
+          echo ""
+
+          # Verify all files are in place
+          WIKI_FILES=$(find . -name "*.md" -not -name "Home.md" -not -name "_*.md" | sort)
+          WIKI_COUNT=$(echo "$WIKI_FILES" | grep -c .)
+          echo "📋 Wiki files after sync ($WIKI_COUNT files):"
+          ls -la *.md | sort
+
+          # Final verification
+          if [[ $SUCCESS_COUNT -eq $SOURCE_COUNT ]]; then
+            echo "✅ All files synced successfully!"
+          else
+            echo "⚠️ Some files may not have synced properly"
+            exit 1
+          fi
 
       - name: Update Wiki sidebar
         run: |
@@ -184,77 +225,149 @@ jobs:
             sed -i "s/\*最終更新:.*\*/\*最終更新: $(date -u '+%Y-%m-%d %H:%M:%S UTC')\*/" Home.md
           fi
 
-      - name: Commit and push to Wiki
+      - name: Commit and push changes
         run: |
           cd wiki-repo
 
-          # Check if there are any changes
-          if git diff --quiet && git diff --cached --quiet; then
-            echo "📝 No changes to sync"
+          # Stage all changes
+          git add .
+
+          # Check if there are changes to commit
+          if git diff --cached --quiet; then
+            echo "ℹ️ No changes to commit"
             exit 0
           fi
 
-          git add .
+          echo "📝 Preparing commit with change summary..."
 
-          # Create commit message with changed files
-          CHANGED_FILES=$(git diff --cached --name-only | grep -E '\.md$' | head -5)
-          if [[ $(echo "$CHANGED_FILES" | wc -l) -gt 5 ]]; then
-            COMMIT_MSG="wiki: Auto-sync documentation updates
+          # Count changed files
+          CHANGED_MD_FILES=$(git diff --cached --name-only | grep -E '\.md$' || true)
+          CHANGED_COUNT=$(echo "$CHANGED_MD_FILES" | grep -v '^$' | wc -l)
 
-          Updated files:
-          $(echo "$CHANGED_FILES" | head -3)
-          ... and $(( $(git diff --cached --name-only | grep -E '\.md$' | wc -l) - 3 )) more files
+          echo "📊 Changed files: $CHANGED_COUNT"
+          echo "$CHANGED_MD_FILES"
 
-          Source commit: ${{ github.sha }}
-          Triggered by: ${{ github.event_name }}
-          Sync time: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          # Create comprehensive commit message
+          if [[ $CHANGED_COUNT -gt 0 ]]; then
+            COMMIT_MSG="wiki: Auto-sync documentation updates (${CHANGED_COUNT} files)
+
+          📊 Sync Summary:
+          - Total files synced: ${CHANGED_COUNT}
+          - Source: docs/development/
+          - Target: GitHub Wiki
+
+          📝 Updated files:
+          $(echo "$CHANGED_MD_FILES" | head -10 | sed 's/^/  - /')
+          $(if [[ $CHANGED_COUNT -gt 10 ]]; then echo "  ... and $((CHANGED_COUNT - 10)) more files"; fi)
+
+          🔗 Source commit: ${{ github.sha }}
+          🚀 Triggered by: ${{ github.event_name }}
+          ⏰ Sync time: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
           else
-            COMMIT_MSG="wiki: Auto-sync documentation updates
+            COMMIT_MSG="wiki: Auto-sync metadata updates
 
-          Updated files:
-          $CHANGED_FILES
-
-          Source commit: ${{ github.sha }}
-          Triggered by: ${{ github.event_name }}
-          Sync time: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          🔄 Updated Wiki structure and metadata
+          🔗 Source commit: ${{ github.sha }}
+          ⏰ Sync time: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
           fi
 
           git commit -m "$COMMIT_MSG"
 
-          # Push with retry logic
-          for i in {1..3}; do
-            if git push origin master 2>/dev/null || git push origin main 2>/dev/null; then
-              echo "✅ Successfully pushed to Wiki"
+          # Push with improved retry logic
+          echo "🚀 Pushing to Wiki repository..."
+          PUSH_SUCCESS=false
+
+          for i in {1..5}; do
+            echo "📤 Push attempt $i/5..."
+
+            # Try main branch first, then master
+            if git push origin main 2>/dev/null; then
+              echo "✅ Successfully pushed to main branch"
+              PUSH_SUCCESS=true
+              break
+            elif git push origin master 2>/dev/null; then
+              echo "✅ Successfully pushed to master branch"
+              PUSH_SUCCESS=true
               break
             else
-              echo "⚠️ Push attempt $i failed, retrying..."
-              sleep 2
+              echo "⚠️ Push attempt $i failed"
+              if [[ $i -lt 5 ]]; then
+                echo "🔄 Retrying in $((i * 2)) seconds..."
+                sleep $((i * 2))
+
+                # Try to fetch and rebase before retry
+                echo "🔄 Fetching latest changes..."
+                git fetch origin
+                if git rebase origin/main 2>/dev/null || git rebase origin/master 2>/dev/null; then
+                  echo "✅ Rebased successfully"
+                else
+                  echo "⚠️ Rebase failed, continuing with force push attempt"
+                fi
+              fi
             fi
           done
 
-      - name: Create summary
+          if [[ "$PUSH_SUCCESS" != "true" ]]; then
+            echo "❌ Failed to push after 5 attempts"
+            exit 1
+          fi
+
+          echo "🎉 Wiki sync completed successfully!"
+
+      - name: Create detailed summary
         run: |
           cd wiki-repo
 
-          SYNC_COUNT=$(git diff HEAD~1 --name-only | grep -E '\.md$' | wc -l)
+          # Collect comprehensive sync statistics
+          TOTAL_MD_FILES=$(find . -name "*.md" | wc -l)
+          DOC_FILES=$(find . -name "*.md" -not -name "Home.md" -not -name "_*.md" | wc -l)
           WIKI_URL="https://github.com/${{ github.repository }}/wiki"
+          LATEST_COMMIT=$(git log -1 --format="%h %s")
 
-          echo "## 📖 Wiki Sync Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "✅ **Sync completed successfully**" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Files synced**: $SYNC_COUNT" >> $GITHUB_STEP_SUMMARY
-          echo "- **Wiki URL**: [$WIKI_URL]($WIKI_URL)" >> $GITHUB_STEP_SUMMARY
-          echo "- **Source commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Sync time**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "� === Detailed Wiki Sync Summary ===" 
+          echo "🎯 Repository: ${{ github.repository }}"
+          echo "🔗 Wiki URL: $WIKI_URL"
+          echo "📊 Statistics:"
+          echo "  - Total Wiki files: $TOTAL_MD_FILES"
+          echo "  - Documentation files: $DOC_FILES"
+          echo "  - Source directory: docs/development/"
+          echo "  - Last commit: $LATEST_COMMIT"
+          echo "  - Sync time: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "  - Source commit: ${{ github.sha }}"
+          echo ""
+          echo "📁 All Wiki files:"
+          find . -name "*.md" | sort | sed 's|^./||' | sed 's/^/  📄 /'
+          echo ""
+          echo "🚀 Wiki is now fully synchronized!"
+          echo "👀 View at: $WIKI_URL"
 
-          if [[ $SYNC_COUNT -gt 0 ]]; then
-            echo "### Updated files:" >> $GITHUB_STEP_SUMMARY
-            git diff HEAD~1 --name-only | grep -E '\.md$' | while read -r file; do
-              echo "- \`$file\`" >> $GITHUB_STEP_SUMMARY
-            done
-          fi
+          # Create comprehensive GitHub Step Summary
+          cat >> $GITHUB_STEP_SUMMARY << EOF
+          ## 📚 Wiki Synchronization Complete
+
+          ### 📊 Sync Results
+          - ✅ **Repository**: \`${{ github.repository }}\`
+          - 📁 **Documentation files synced**: **${DOC_FILES}** files
+          - 📋 **Total Wiki files**: ${TOTAL_MD_FILES} files
+          - 🔗 **Source commit**: [\`${{ github.sha }}\`](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
+          - ⏰ **Sync time**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+
+          ### 🎯 Access Your Wiki
+          - [📖 **View Wiki**](${WIKI_URL}) 
+          - [🏠 **Wiki Home**](${WIKI_URL}/Home)
+          - [📋 **Complete Index**](${WIKI_URL}/README)
+
+          ### 📝 Synchronized Files
+          $(find . -name "*.md" -not -name "Home.md" -not -name "_*.md" | sort | sed 's|^./||' | sed 's/^/- `/' | sed 's/$/`/')
+
+          ### 🔄 Automation Details
+          - **Source**: \`docs/development/\` directory
+          - **Target**: GitHub Wiki repository
+          - **Method**: Automated sync via GitHub Actions
+          - **Trigger**: Push to \`docs/development/**\` files
+
+          > 🤖 **Fully automated** - Your local markdown files are now live on GitHub Wiki!
+          EOF
 
       - name: Notify on failure
         if: failure()
