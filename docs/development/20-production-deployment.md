@@ -448,21 +448,279 @@ export const logger = {
 
 ### 環境変数管理
 
+Next.jsプロジェクトでは、環境別に設定ファイルを分離し、機密情報の安全な管理を実現しています。
+
+#### 環境変数ファイル構成
+
+| ファイル | 用途 | Git管理 | 説明 |
+|---------|------|---------|------|
+| `.env.example` | テンプレート | ✅ 管理する | 設定項目の例示と説明 |
+| `.env.development` | 開発環境 | ✅ 管理する | 開発時のデフォルト値 |
+| `.env.production` | 本番環境 | ✅ 管理する | 本番時のデフォルト値（機密情報なし） |
+| `.env.local` | ローカル環境 | ❌ 管理しない | 個人用の上書き設定 |
+| `.env.production.local` | 本番ローカル | ❌ 管理しない | 本番用機密情報 |
+
+#### `.env.example` - 設定テンプレート
+
 ```bash
-# .env.production
-NODE_ENV=production
-NEXT_TELEMETRY_DISABLED=1
+# Next.js環境変数設定例
+# このファイルは .env.local にコピーして使用してください
 
-# データベース
-DATABASE_URL=postgresql://user:password@host:5432/dbname
+# ==================================================
+# アプリケーション設定
+# ==================================================
+# アプリケーション名
+NEXT_PUBLIC_APP_NAME="Next.js学習テンプレート"
 
-# 認証
-AUTH_SECRET=your-super-secure-secret
-JWT_SECRET=another-secure-secret
+# アプリケーションバージョン
+NEXT_PUBLIC_APP_VERSION="0.1.0"
 
-# 外部API
-API_KEY=your-api-key
+# 開発/本番環境フラグ
+NEXT_PUBLIC_IS_DEVELOPMENT="true"
+
+# ==================================================
+# API設定
+# ==================================================
+# 外部API URL（例：JSONPlaceholder）
+NEXT_PUBLIC_API_URL="https://jsonplaceholder.typicode.com"
+
+# 内部API URL
+API_URL="http://localhost:3000/api"
+
+# API認証キー（サーバーサイドのみ）
+API_SECRET_KEY="your-secret-key-here"
+
+# ==================================================
+# データベース設定（例）
+# ==================================================
+# PostgreSQL接続URL
+# DATABASE_URL="postgresql://username:password@localhost:5432/dbname"
+
+# MongoDB接続URL
+# MONGODB_URI="mongodb://localhost:27017/your-database"
+
+# ==================================================
+# 認証設定（例：NextAuth.js）
+# ==================================================
+# NextAuth.js シークレット
+# NEXTAUTH_SECRET="your-nextauth-secret"
+
+# NextAuth.js URL
+# NEXTAUTH_URL="http://localhost:3000"
+
+# Google OAuth
+# GOOGLE_CLIENT_ID="your-google-client-id"
+# GOOGLE_CLIENT_SECRET="your-google-client-secret"
+
+# ==================================================
+# 外部サービス設定
+# ==================================================
+# Stripe（決済）
+# STRIPE_PUBLIC_KEY="pk_test_..."
+# STRIPE_SECRET_KEY="sk_test_..."
+
+# SendGrid（メール）
+# SENDGRID_API_KEY="SG.xxx"
+
+# Cloudinary（画像管理）
+# CLOUDINARY_CLOUD_NAME="your-cloud-name"
+# CLOUDINARY_API_KEY="your-api-key"
+# CLOUDINARY_API_SECRET="your-api-secret"
+
+# ==================================================
+# Analytics設定
+# ==================================================
+# Google Analytics
+# NEXT_PUBLIC_GA_ID="G-XXXXXXXXXX"
+
+# Vercel Analytics
+# NEXT_PUBLIC_VERCEL_ANALYTICS="true"
+
+# ==================================================
+# 開発ツール設定
+# ==================================================
+# 開発時のログレベル
+LOG_LEVEL="debug"
+
+# デバッグモード
+DEBUG="true"
+
+# ==================================================
+# 注意事項
+# ==================================================
+# 1. NEXT_PUBLIC_ プレフィックスの変数はクライアントサイドでも利用可能
+# 2. プレフィックスなしの変数はサーバーサイドでのみ利用可能
+# 3. 機密情報（API キー、パスワードなど）は NEXT_PUBLIC_ を付けない
+# 4. 本番環境では必ず異なる値を設定する
+# 5. このファイルは .gitignore に含めること（.env.local は既に除外済み）
 ```
+
+#### `.env.development` - 開発環境設定
+
+```bash
+# 開発環境用設定
+NODE_ENV=development
+
+# アプリケーション設定
+NEXT_PUBLIC_APP_NAME="Next.js学習テンプレート (開発版)"
+NEXT_PUBLIC_APP_VERSION="0.1.0-dev"
+NEXT_PUBLIC_IS_DEVELOPMENT="true"
+
+# 開発用API設定
+NEXT_PUBLIC_API_URL="http://localhost:3000/api"
+API_URL="http://localhost:3000/api"
+
+# 開発用デバッグ設定
+DEBUG="true"
+LOG_LEVEL="debug"
+
+# Hot Reload設定
+NEXT_PUBLIC_HOT_RELOAD="true"
+
+# 開発ツール設定
+NEXT_TELEMETRY_DISABLED=1
+BROWSER=none
+
+# 開発用セキュリティ設定（緩和）
+NEXT_PUBLIC_STRICT_CSP="false"
+```
+
+**特徴**:
+- デバッグ情報を最大化
+- 開発者体験を優先
+- ローカルホストでのAPI接続
+- セキュリティ制約を緩和（開発効率向上）
+
+#### `.env.production` - 本番環境設定
+
+```bash
+# 本番環境用設定
+NODE_ENV=production
+
+# アプリケーション設定
+NEXT_PUBLIC_APP_NAME="Next.js学習テンプレート"
+NEXT_PUBLIC_APP_VERSION="0.1.0"
+NEXT_PUBLIC_IS_DEVELOPMENT="false"
+
+# 本番用API設定
+NEXT_PUBLIC_API_URL="https://your-domain.com/api"
+API_URL="https://your-domain.com/api"
+
+# 本番用ログ設定
+DEBUG="false"
+LOG_LEVEL="warn"
+
+# パフォーマンス設定
+NEXT_PUBLIC_HOT_RELOAD="false"
+
+# セキュリティ設定（強化）
+NEXT_PUBLIC_STRICT_CSP="true"
+
+# Analytics設定（本番のみ）
+# NEXT_PUBLIC_GA_ID="G-XXXXXXXXXX"
+# NEXT_PUBLIC_VERCEL_ANALYTICS="true"
+
+# 本番用最適化
+NEXT_TELEMETRY_DISABLED=1
+```
+
+**特徴**:
+- ログレベルを`warn`に制限（パフォーマンス向上）
+- セキュリティ設定を強化
+- 本番ドメインでのAPI接続
+- Analytics有効化（コメントアウトされているため、必要に応じて有効化）
+
+#### 環境変数の優先順位
+
+Next.jsは以下の優先順位で環境変数をロードします:
+
+1. `process.env`（システム環境変数）
+2. `.env.$(NODE_ENV).local`（例: `.env.production.local`）
+3. `.env.local`（`NODE_ENV=test`の時は読み込まれない）
+4. `.env.$(NODE_ENV)`（例: `.env.production`）
+5. `.env`
+
+**推奨設定方法**:
+```bash
+# 開発環境
+cp .env.example .env.local
+# .env.local を編集して個人の設定を追加
+
+# 本番環境（Vercel/Netlify等）
+# プラットフォームのUIで環境変数を設定
+# または .env.production.local に機密情報を記述（Gitには含めない）
+```
+
+#### NEXT_PUBLIC_ プレフィックスの重要性
+
+```typescript
+// ✅ クライアントサイドでアクセス可能
+const appName = process.env.NEXT_PUBLIC_APP_NAME;
+
+// ❌ サーバーサイドのみアクセス可能（クライアントでは undefined）
+const apiSecret = process.env.API_SECRET_KEY;
+```
+
+**セキュリティ上の注意**:
+- **機密情報に`NEXT_PUBLIC_`を付けない**（APIキー、パスワード、シークレット等）
+- ブラウザのDevToolsで`NEXT_PUBLIC_`変数は確認可能
+- サーバーサイド専用の認証情報は必ずプレフィックスなしで管理
+
+#### Docker環境での環境変数管理
+
+```yaml
+# docker-compose.yml
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env.production.local
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_APP_NAME=${NEXT_PUBLIC_APP_NAME}
+```
+
+**利点**:
+- `.env.production.local`で機密情報を一元管理
+- `environment`セクションで必要な変数のみ公開
+- ビルド時と実行時で異なる環境変数を使用可能
+
+#### セキュリティベストプラクティス
+
+1. **機密情報の管理**
+   ```bash
+   # .gitignore に必ず追加
+   .env*.local
+   .env.production
+   ```
+
+2. **バリデーション**
+   ```typescript
+   // lib/env.ts
+   export function validateEnv() {
+     const required = ['NEXT_PUBLIC_API_URL', 'API_SECRET_KEY'];
+     const missing = required.filter(key => !process.env[key]);
+
+     if (missing.length > 0) {
+       throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
+     }
+   }
+   ```
+
+3. **型安全性**
+   ```typescript
+   // types/env.d.ts
+   declare namespace NodeJS {
+     interface ProcessEnv {
+       NEXT_PUBLIC_APP_NAME: string;
+       NEXT_PUBLIC_API_URL: string;
+       API_SECRET_KEY: string;
+       NODE_ENV: 'development' | 'production' | 'test';
+     }
+   }
+   ```
 
 ### セキュリティミドルウェア
 
