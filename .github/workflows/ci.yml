@@ -1,0 +1,161 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, latest, develop]
+  pull_request:
+    branches: [main, latest]
+
+permissions:
+  contents: read
+
+jobs:
+  # 依存関係とキャッシュのセットアップ
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      node-version: ${{ steps.node.outputs.version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Read Node.js version
+        id: node
+        run: echo "version=$(cat .nvmrc)" >> $GITHUB_OUTPUT
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+  # リント
+  lint:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ needs.setup.outputs.node-version }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+  # TypeScript型チェック
+  type-check:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ needs.setup.outputs.node-version }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run type check
+        run: npm run type-check
+
+  # ビルドテスト
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ needs.setup.outputs.node-version }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: .next/
+
+  # セキュリティ監査
+  security:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ needs.setup.outputs.node-version }}
+          cache: "npm"
+
+      - name: Run security audit
+        run: npm audit --audit-level=moderate
+
+  # 最終チェック（改善版）
+  final-check:
+    needs: [lint, type-check, build, security]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Check all jobs
+        run: |
+          echo "=== Job Results ==="
+          echo "lint:       ${{ needs.lint.result }}"
+          echo "type-check: ${{ needs.type-check.result }}"
+          echo "build:      ${{ needs.build.result }}"
+          echo "security:   ${{ needs.security.result }}"
+          echo ""
+          
+          failed=false
+          if [[ "${{ needs.lint.result }}" != "success" ]]; then
+            echo "❌ lint failed"
+            failed=true
+          fi
+          if [[ "${{ needs.type-check.result }}" != "success" ]]; then
+            echo "❌ type-check failed"
+            failed=true
+          fi
+          if [[ "${{ needs.build.result }}" != "success" ]]; then
+            echo "❌ build failed"
+            failed=true
+          fi
+          if [[ "${{ needs.security.result }}" != "success" ]]; then
+            echo "❌ security failed"
+            failed=true
+          fi
+
+          if [[ "$failed" == "true" ]]; then
+            echo ""
+            echo "❌ One or more checks failed."
+            exit 1
+          fi
+
+          echo "✅ All checks passed!"
+          exit 0
