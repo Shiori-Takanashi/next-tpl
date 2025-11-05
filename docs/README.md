@@ -1,95 +1,303 @@
-# ドキュメント
+# 開発者向けドキュメント
 
-## 📖 ユーザー向けドキュメント
+このディレクトリには、Next.js学習テンプレートの開発・保守に関する完全なドキュメントが格納されています。
 
-- [使用ガイド](tpl/point01.md) - 包括的な使用方法
-- [バージョン戦略](tpl/point02.md) - 依存関係とバージョン管理
+> 🚀 **Wiki自動同期**: このディレクトリの変更は自動的に[GitHub Wiki](https://github.com/Shiori-Takanashi/next-tpl/wiki)に同期されます
 
-## 🔧 開発者向けドキュメント
+## 📋 ドキュメント一覧
 
-**⚠️ 重要**: 詳細な開発記録は **GitHub Wiki** に移行予定です。
+### プロジェクト基盤
 
-現在 `docs/development/` には26個の詳細な実装記録（292KB）がありますが、
-これらはプロジェクトの軽量化のために **GitHub Wiki** への移行を計画しています。
+- [01-project-overview.md](./01-project-overview.md) - プロジェクトの概要と目的
+- [02-docker-environment.md](./02-docker-environment.md) -
+  Docker環境の設計と実装
+- [03-automation-tools.md](./03-automation-tools.md) - セットアップ自動化とツール
 
-### 移行対象ドキュメント
+### ドキュメント戦略
 
-以下のドキュメントは Wiki 移行対象です：
+- [04-documentation-strategy.md](./04-documentation-strategy.md) - ドキュメント構成の方針
+- [05-final-verification.md](./05-final-verification.md) - 最終検証とテスト
+- [06-tools-restructure.md](./06-tools-restructure.md) - ツール構成の再編成
 
-#### 基盤・設計記録
-- プロジェクト概要と目的
-- Docker環境設計
-- 自動化ツール実装
-- ドキュメント戦略
+### プロジェクト最適化
 
-#### 技術実装記録
-- TailwindCSS v4対応
-- Next.js 16 + React 19実装
-- TypeScript設定最適化
-- VS Code統合環境
+- [07-project-optimization.md](./07-project-optimization.md) - プロジェクト全体の最適化記録
+- [08-testing-strategy.md](./08-testing-strategy.md) - テストとCI/CD戦略
+- [09-security-practices.md](./09-security-practices.md) - セキュリティとベストプラクティス
+- [10-performance-optimization.md](./10-performance-optimization.md) - パフォーマンス最適化ガイド
 
-#### 品質・運用記録
-- テスト戦略とCI/CD
-- セキュリティ実装
-- パフォーマンス最適化
-- プロダクション環境構築
+### UI/UX・技術詳細
 
-#### 最新の改善記録
-- **CI ワークフローモジュール化** - GitHub Actions の再利用可能ワークフロー分割
-- **開発環境標準化** - EditorConfig、Prettier、GitHub管理テンプレート統合
-- **Wiki移行戦略** - ドキュメント管理の自動化と軽量化
+- [11-ui-design-system.md](./11-ui-design-system.md) - デザインシステム設計記録
+- [12-japanese-optimization.md](./12-japanese-optimization.md) - 日本語最適化実装記録
+- [13-tailwindcss-v4.md](./13-tailwindcss-v4.md) - TailwindCSS v4 実装記録
+- [14-vscode-integration.md](./14-vscode-integration.md) - VS
+  Code統合開発環境構築記録
 
-### Wiki移行の利点
+### 自動化・最新技術
 
-1. **リポジトリ軽量化**: 292KB → 約50KB（83%削減）
-2. **関心の分離**: 学習テンプレート vs 開発記録
-3. **優れたUX**: サイドバーナビゲーション、全文検索
-4. **自動同期**: GitHub Actions による継続的更新
+- [15-automation-scripts.md](./15-automation-scripts.md) - 自動化スクリプト詳細実装記録
+- [16-nextjs-16-react-19.md](./16-nextjs-16-react-19.md) - Next.js 16.0.0 +
+  React 19.2.0 実装記録
+- [17-project-completion-analysis.md](./17-project-completion-analysis.md) - プロジェクト完成度と学習効果分析
 
-### 移行実行
+### 実践・運用
 
-Wiki移行は以下のツールで実行できます：
+- [18-error-handling-troubleshooting.md](./18-error-handling-troubleshooting.md) - エラー処理とトラブルシューティング実装記録
+- [19-learning-curriculum.md](./19-learning-curriculum.md) - 学習カリキュラム設計と実装戦略
+- [20-production-deployment.md](./20-production-deployment.md) - プロダクション環境デプロイ戦略
+
+### コンポーネント・リファクタリング
+
+- [21-component-system-design.md](./21-component-system-design.md) - コンポーネントシステム設計と実装記録
+- [22-ui-ux-refactoring.md](./22-ui-ux-refactoring.md) -
+  UI/UXリファクタリング実装記録
+
+### ツールセット・開発支援
+
+- [23-tools-extension.md](./23-tools-extension.md) - 包括的開発ツールセット拡張実装記録
+
+### CI/CD・開発環境標準化
+
+- [24-ci-workflow-modularization.md](./24-ci-workflow-modularization.md) - GitHub Actions CIワークフローのモジュール化実装記録
+- [25-development-standards.md](./25-development-standards.md) - 開発環境標準化実装記録（EditorConfig、Prettier、GitHub管理テンプレート）
+
+### プロジェクト管理・移行戦略
+
+- [26-github-wiki-migration-strategy.md](./26-github-wiki-migration-strategy.md) - GitHub Wiki自動移行戦略とリポジトリ軽量化
+- [27-github-actions-workflow-separation.md](./27-github-actions-workflow-separation.md) - GitHub Actions ワークフロー責任分離設計
+
+## 🎯 開発ガイド
+
+### テンプレートのカスタマイズ
+
+1. **基本設定の変更**
+
+   ```bash
+   # package.jsonのメタデータ更新
+   - name, description, author
+   - repository URL
+   - keywords
+   ```
+
+2. **Docker設定の調整**
+
+   ```bash
+   # Dockerfileの最適化
+   - Node.jsバージョン変更
+   - 依存関係の調整
+   - マルチステージビルドの変更
+   ```
+
+3. **自動化スクリプトの拡張**
+   ```bash
+   # tools/ディレクトリでの作業
+   - setup.sh / setup.zsh の機能追加
+   - 新しいシェル対応
+   - 検証ロジックの改善
+   ```
+
+### テスト戦略
+
+#### 手動テスト
 
 ```bash
-# 手動移行
-./tools/migrate-to-wiki.zsh
-
-# 自動同期（GitHub Actions）
-# docs/development/ への変更時に自動実行
+# 基本動作確認
+make setup          # セットアップ確認
+make dev            # ローカル開発
+make dev-docker     # Docker開発
+make build          # ビルド確認
+make lint           # コード品質確認
 ```
 
-詳細は [Wiki移行戦略](development/26-github-wiki-migration-strategy.md) を参照してください。
+#### 環境テスト
 
-## 📋 現在のドキュメント一覧
+```bash
+# 異なる環境での検証
+- 新規環境でのsetup実行
+- 既存プロジェクトでの動作確認
+- シェル別の動作確認（bash/zsh）
+```
 
-### development/ ディレクトリ（Wiki移行予定）
+### 保守・更新の方針
 
-| ファイル | 内容 | 移行先 |
-|---------|------|--------|
-| 01-project-overview.md | プロジェクト全体設計 | Wiki |
-| 02-docker-environment.md | Docker環境実装 | Wiki |
-| 03-automation-tools.md | 自動化ツール | Wiki |
-| ... | (全26ファイル) | Wiki |
-| 24-ci-workflow-modularization.md | CI改善記録 | Wiki |
-| 25-development-standards.md | 開発標準化 | Wiki |
-| 26-github-wiki-migration-strategy.md | 移行戦略 | Wiki |
+#### 依存関係の更新
 
-### tpl/ ディレクトリ（保持）
+```bash
+# セマンティックバージョニングに従った更新
+- Next.js: メジャーバージョンは慎重に
+- React: Next.jsと互換性を確認
+- TypeScript: 型定義の変更を確認
+```
 
-| ファイル | 内容 | 状態 |
-|---------|------|------|
-| point01.md | ユーザー使用ガイド | 保持 |
-| point02.md | バージョン戦略 | 保持 |
+#### ドキュメントの更新
+
+```bash
+# 変更に伴うドキュメント更新
+1. 技術変更 → 該当ドキュメントを更新
+2. 新機能追加 → README.mdとdocsを更新
+3. 破壊的変更 → 移行ガイドを作成
+```
+
+## 🔧 開発環境セットアップ
+
+### 必要な環境
+
+- Node.js 22.11.0+
+- Docker & Docker Compose
+- Git
+- bash または zsh
+
+### 開発開始手順
+
+```bash
+# 1. リポジトリのクローン
+git clone <repository-url>
+cd next-tpl
+
+# 2. 開発環境セットアップ
+./setup
+
+# 3. 開発モード起動
+make dev
+```
+
+### トラブルシューティング
+
+#### よくある問題
+
+1. **Node.jsバージョン不一致**
+   - .nvmrcを確認
+   - nvm use で正しいバージョンに切り替え
+
+2. **Docker関連エラー**
+   - Docker Desktopが起動しているか確認
+   - docker-compose versionで動作確認
+
+3. **ポート競合**
+   - 3000番ポートが使用中の場合
+   - docker-compose.ymlでポート変更
+
+## 📝 変更履歴の記録
+
+重要な変更は以下に記録してください：
+
+### [0.1.0] - 初期リリース
+
+- 基本的なNext.jsテンプレート
+- Docker環境
+- 自動化スクリプト
+- ドキュメント体系
+
+### 今後の予定
+
+- [ ] テストフレームワークの統合
+- [ ] CI/CDパイプラインの追加
+- [ ] より多くの学習リソースの組み込み
+- [ ] プラグイン機能の検討
 
 ## 🤝 コントリビューション
 
-- [Issue報告](https://github.com/Shiori-Takanashi/next-tpl/issues)
-- [Pull Request](https://github.com/Shiori-Takanashi/next-tpl/pulls)
-- [セキュリティポリシー](../SECURITY.md)
+### 変更提案の流れ
+
+1. Issueでの議論
+2. ブランチ作成（feature/xxx）
+3. 実装・テスト
+4. ドキュメント更新
+5. プルリクエスト
+
+### コードレビューのポイント
+
+- 学習者にとっての理解しやすさ
+- ドキュメントの整合性
+- 異なる環境での動作確認
+- セキュリティとベストプラクティス
+
+## 🔗 関連ドキュメント
+
+### ユーザー向けドキュメント
+
+- [../tpl/point01.md](../tpl/point01.md) - 使用ガイド（包括的）
+- [../tpl/point02.md](../tpl/point02.md) - バージョン戦略（詳細検討）
+
+### プロジェクト概要
+
+- [../../README.md](../../README.md) - プロジェクトメインドキュメント
+- [../../tools/README.md](../../tools/README.md) - セットアップツール説明
+
+### ユーザー向けドキュメント（User Documentation）
+
+```
+docs/tpl/
+├── point01.md                  # 使用ガイド（包括的）
+└── point02.md                  # バージョン戦略（詳細検討）
+```
+
+## 🎯 開発記録の目的
+
+### 1. 透明性の確保
+
+- 実装過程の完全な記録
+- 意思決定の理由と根拠の明示
+- 技術的選択肢の比較検討
+
+### 2. 学習価値の提供
+
+- 実践的な開発プロセスの体験
+- 問題解決のアプローチ方法
+- ベストプラクティスの実装例
+
+### 3. 保守・拡張の支援
+
+- 将来の改修時の参考資料
+- 新機能追加時の設計指針
+- トラブルシューティングの手がかり
+
+## 📚 読み進め方
+
+### 順次読解（推奨）
+
+1. **01-project-overview.md**: 全体像の把握
+2. **02-docker-environment.md**: 環境固定化の理解
+3. **03-automation-tools.md**: 自動化の実装
+4. **04-documentation-strategy.md**: ドキュメント戦略
+5. **05-final-verification.md**: 完成品の評価
+6. **06-tools-restructure.md**: 最新の改善
+
+### 目的別読解
+
+- **Docker理解**: 02-docker-environment.md
+- **シェル対応**: 03-automation-tools.md + 06-tools-restructure.md
+- **バージョン戦略**: 04-documentation-strategy.md + ../tpl/point02.md
+- **全体設計**: 01-project-overview.md + 05-final-verification.md
+
+## 🔗 関連ドキュメント
+
+### 外部参照
+
+- [../tpl/point01.md](../tpl/point01.md) - ユーザー向け使用ガイド
+- [../tpl/point02.md](../tpl/point02.md) - バージョン固定戦略詳細
+- [../../tools/README.md](../../tools/README.md) - セットアップツール説明
+- [../../README.md](../../README.md) - プロジェクト概要
+
+### 開発者向けリソース
+
+- **実装コード**: ルートディレクトリの各設定ファイル
+- **Docker設定**: Dockerfile, docker-compose.yml
+- **自動化スクリプト**: tools/ディレクトリ
+- **ビルド設定**: package.json, Makefile
+
+## 🔄 更新履歴
+
+| 日付       | 更新内容                                                                      |
+| ---------- | ----------------------------------------------------------------------------- |
+| 2025-10-26 | 初回実装完了、全6記録作成                                                     |
+| 2025-10-26 | ファイル構造改善、development/ディレクトリ化                                  |
+| 2025-11-04 | 24-ci-workflow-modularization.md 追加（CIワークフローモジュール化）          |
+| 2025-11-04 | 25-development-standards.md 追加（開発環境標準化：EditorConfig/Prettier等）  |
+| 2025-11-04 | 20-production-deployment.md 更新（環境変数管理の詳細セクション追加）         |
+| 2025-11-05 | 26-github-wiki-migration-strategy.md 追加（Wiki移行戦略）                   |
 
 ---
 
-**📅 移行スケジュール**: 2025年11月中に Wiki 移行を実行予定
-**📊 効果**: リポジトリサイズ83%削減、学習者向けUI改善
-
-*この整理により、学習テンプレートとしての本来の目的がより明確になります。*
+**注意**: これらの記録は実装時点の内容です。将来の更新により、一部の技術的詳細が変更される可能性があります。最新の情報は各ドキュメントの作成日とGitコミット履歴を参照してください。
