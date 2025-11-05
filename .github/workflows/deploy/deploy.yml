@@ -1,0 +1,108 @@
+name: Deploy to Production
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+jobs:
+  # 本番環境ビルドテスト
+  build-production:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: |
+          npm run type-check
+          npm run lint
+          npm run format:check
+
+      - name: Build for production
+        env:
+          NODE_ENV: production
+        run: npm run build
+
+      - name: Test production build
+        run: |
+          npm start &
+          sleep 10
+          npm run health
+          pkill -f "npm start"
+
+  # Docker本番ビルド
+  build-docker:
+    needs: build-production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build production Docker image
+        run: |
+          docker build -t next-tpl:latest .
+          docker run --name test-container -d -p 3000:3000 next-tpl:latest
+          sleep 30
+          curl -f http://localhost:3000/api/health
+          docker stop test-container
+          docker rm test-container
+
+      - name: Save Docker image
+        run: |
+          docker save next-tpl:latest | gzip > next-tpl-latest.tar.gz
+
+      - name: Upload Docker image artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: docker-image
+          path: next-tpl-latest.tar.gz
+          retention-days: 1
+
+  # 本番デプロイ（手動承認必要）
+  deploy-production:
+    needs: [build-production, build-docker]
+    runs-on: ubuntu-latest
+    environment: production
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Docker image
+        uses: actions/download-artifact@v3
+        with:
+          name: docker-image
+
+      - name: Load Docker image
+        run: |
+          docker load < next-tpl-latest.tar.gz
+
+      - name: Deploy to production
+        run: |
+          echo "🚀 本番環境へのデプロイを開始"
+          # ここに実際のデプロイ処理を追加
+          # 例: docker-compose -f docker-compose.prod.yml up -d
+          echo "✅ デプロイ完了"
+
+      - name: Health check
+        run: |
+          echo "🔍 ヘルスチェック実行中..."
+          # 本番環境のヘルスチェック
+          # curl -f ${{ secrets.PRODUCTION_URL }}/api/health
