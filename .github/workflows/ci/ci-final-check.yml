@@ -2,13 +2,9 @@ name: CI - Final Check
 
 on:
   push:
-    branches:
-      - main
-      - latest
+    branches: [main, latest]
   pull_request:
-    branches:
-      - main
-      - latest
+    branches: [main, latest]
   workflow_dispatch:
 
 jobs:
