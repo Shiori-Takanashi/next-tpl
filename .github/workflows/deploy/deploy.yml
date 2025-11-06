@@ -2,7 +2,6 @@ name: Deploy to Production
 
 on:
   push:
-    branches: [latest]
   workflow_dispatch:
 
 jobs:
@@ -79,7 +78,6 @@ jobs:
   deploy-ready:
     needs: [check, build, docker-build]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     steps:
       - name: Deploy readiness notification
         run: |
