@@ -1,7 +1,7 @@
 name: Deploy to Production
 
 on:
-  push:        # すべてのブランチを対象にする
+  push: # すべてのブランチを対象にする
   workflow_dispatch:
 
 jobs:

@@ -2,7 +2,8 @@
 
 このディレクトリには、Next.js学習テンプレートの開発・保守に関する完全なドキュメントが格納されています。
 
-> 🚀 **Wiki自動同期**: このディレクトリの変更は自動的に[GitHub Wiki](https://github.com/Shiori-Takanashi/next-tpl/wiki)に同期されます
+> 🚀
+> **Wiki自動同期**: このディレクトリの変更は自動的に[GitHub Wiki](https://github.com/Shiori-Takanashi/next-tpl/wiki)に同期されます
 
 ## 📋 ドキュメント一覧
 
@@ -59,13 +60,16 @@
 
 ### CI/CD・開発環境標準化
 
-- [24-ci-workflow-modularization.md](./24-ci-workflow-modularization.md) - GitHub Actions CIワークフローのモジュール化実装記録
+- [24-ci-workflow-modularization.md](./24-ci-workflow-modularization.md) -
+  GitHub Actions CIワークフローのモジュール化実装記録
 - [25-development-standards.md](./25-development-standards.md) - 開発環境標準化実装記録（EditorConfig、Prettier、GitHub管理テンプレート）
 
 ### プロジェクト管理・移行戦略
 
-- [26-github-wiki-migration-strategy.md](./26-github-wiki-migration-strategy.md) - GitHub Wiki自動移行戦略とリポジトリ軽量化
-- [27-github-actions-workflow-separation.md](./27-github-actions-workflow-separation.md) - GitHub Actions ワークフロー責任分離設計
+- [26-github-wiki-migration-strategy.md](./26-github-wiki-migration-strategy.md) -
+  GitHub Wiki自動移行戦略とリポジトリ軽量化
+- [27-github-actions-workflow-separation.md](./27-github-actions-workflow-separation.md) -
+  GitHub Actions ワークフロー責任分離設計
 
 ## 🎯 開発ガイド
 
@@ -289,13 +293,13 @@ docs/tpl/
 
 ## 🔄 更新履歴
 
-| 日付       | 更新内容                                                                      |
-| ---------- | ----------------------------------------------------------------------------- |
-| 2025-10-26 | 初回実装完了、全6記録作成                                                     |
-| 2025-10-26 | ファイル構造改善、development/ディレクトリ化                                  |
-| 2025-11-04 | 24-ci-workflow-modularization.md 追加（CIワークフローモジュール化）          |
-| 2025-11-04 | 25-development-standards.md 追加（開発環境標準化：EditorConfig/Prettier等）  |
-| 2025-11-04 | 20-production-deployment.md 更新（環境変数管理の詳細セクション追加）         |
+| 日付       | 更新内容                                                                    |
+| ---------- | --------------------------------------------------------------------------- |
+| 2025-10-26 | 初回実装完了、全6記録作成                                                   |
+| 2025-10-26 | ファイル構造改善、development/ディレクトリ化                                |
+| 2025-11-04 | 24-ci-workflow-modularization.md 追加（CIワークフローモジュール化）         |
+| 2025-11-04 | 25-development-standards.md 追加（開発環境標準化：EditorConfig/Prettier等） |
+| 2025-11-04 | 20-production-deployment.md 更新（環境変数管理の詳細セクション追加）        |
 | 2025-11-05 | 26-github-wiki-migration-strategy.md 追加（Wiki移行戦略）                   |
 
 ---

@@ -1,7 +1,6 @@
 # GitHub Wiki 自動移行戦略
 
-**作成日**: 2025年11月4日
-**目的**: 開発記録の適切な配置とリポジトリ軽量化
+**作成日**: 2025年11月4日 **目的**: 開発記録の適切な配置とリポジトリ軽量化
 
 ## 📋 問題の背景
 
@@ -98,6 +97,7 @@ git push origin master
 ```
 
 **使用方法**:
+
 ```bash
 chmod +x tools/migrate-to-wiki.zsh
 ./tools/migrate-to-wiki.zsh
@@ -114,7 +114,7 @@ on:
   push:
     branches: [main, latest]
     paths:
-      - 'docs/development/**'
+      - "docs/development/**"
   workflow_dispatch:
 
 jobs:
@@ -162,6 +162,7 @@ jobs:
 ```
 
 **トリガー条件**:
+
 - `docs/development/` への変更時
 - 手動実行（workflow_dispatch）
 
@@ -194,7 +195,8 @@ next-tpl/
 
 詳細な開発記録は **GitHub Wiki** に移行しました：
 
-**📚 [Next.js Template Wiki](https://github.com/Shiori-Takanashi/next-tpl/wiki)**
+**📚
+[Next.js Template Wiki](https://github.com/Shiori-Takanashi/next-tpl/wiki)**
 
 ### Wiki コンテンツ
 
@@ -205,7 +207,8 @@ next-tpl/
 - 学習カリキュラム設計
 
 ---
-*開発記録は 2025年11月4日にWikiに移行*
+
+_開発記録は 2025年11月4日にWikiに移行_
 ```
 
 ## 📊 Wiki 構成設計
@@ -252,7 +255,8 @@ Wiki Home
 - [Issue報告](https://github.com/Shiori-Takanashi/next-tpl/issues)
 
 ---
-*自動同期: GitHub Actions*
+
+_自動同期: GitHub Actions_
 ```
 
 #### `_Sidebar.md` - ナビゲーション
@@ -261,21 +265,26 @@ Wiki Home
 ## 📚 ドキュメント
 
 ### 基盤・設計
-* [[Project Overview|01-project-overview]]
-* [[Docker Environment|02-docker-environment]]
+
+- [[Project Overview|01-project-overview]]
+- [[Docker Environment|02-docker-environment]]
 
 ### 最新改善
-* [[CI Workflow Modularization|24-ci-workflow-modularization]]
-* [[Development Standards|25-development-standards]]
+
+- [[CI Workflow Modularization|24-ci-workflow-modularization]]
+- [[Development Standards|25-development-standards]]
 
 ---
+
 [[📋 完全一覧|README]]
 ```
 
 #### `_Footer.md` - 共通フッター
 
 ```markdown
-📖 [全ドキュメント](README) | 🏠 [メインリポジトリ](https://github.com/Shiori-Takanashi/next-tpl) | 🐛 [Issue](https://github.com/Shiori-Takanashi/next-tpl/issues)
+📖 [全ドキュメント](README) | 🏠
+[メインリポジトリ](https://github.com/Shiori-Takanashi/next-tpl) | 🐛
+[Issue](https://github.com/Shiori-Takanashi/next-tpl/issues)
 ```
 
 ## 🔄 移行プロセス
@@ -296,6 +305,7 @@ Wiki Home
 ### Phase 2: 移行実行
 
 1. **手動移行の実行**
+
    ```bash
    ./tools/migrate-to-wiki.zsh
    ```
@@ -314,6 +324,7 @@ Wiki Home
 ### Phase 3: 後処理
 
 1. **メインリポジトリの整理**
+
    ```bash
    rm -rf docs/development/
    # docs/README.md の更新
@@ -329,11 +340,11 @@ Wiki Home
 
 ### リポジトリ軽量化
 
-| 項目 | 移行前 | 移行後 | 改善 |
-|-----|--------|--------|------|
-| docs/ サイズ | 292KB | ~50KB | 83%削減 |
-| ファイル数 | 26個 | 2-3個 | 88%削減 |
-| クローン時間 | 長い | 短縮 | 高速化 |
+| 項目         | 移行前 | 移行後 | 改善    |
+| ------------ | ------ | ------ | ------- |
+| docs/ サイズ | 292KB  | ~50KB  | 83%削減 |
+| ファイル数   | 26個   | 2-3個  | 88%削減 |
+| クローン時間 | 長い   | 短縮   | 高速化  |
 
 ### UX向上
 
@@ -403,4 +414,5 @@ Wiki Home
 
 ---
 
-**結論**: GitHub Wiki移行は、プロジェクトの目的明確化、UX向上、保守性強化を同時に実現する戦略的な決断です。適切な自動化により、ドキュメント管理の負担を軽減しつつ、各関係者にとって最適なドキュメント体験を提供できます。
+**結論**: GitHub
+Wiki移行は、プロジェクトの目的明確化、UX向上、保守性強化を同時に実現する戦略的な決断です。適切な自動化により、ドキュメント管理の負担を軽減しつつ、各関係者にとって最適なドキュメント体験を提供できます。

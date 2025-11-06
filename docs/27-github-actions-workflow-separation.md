@@ -1,11 +1,11 @@
 # GitHub Actions ワークフロー設計戦略
 
-**作成日**: 2025年11月5日
-**目的**: CI/CD パイプラインの責任分離と最適化
+**作成日**: 2025年11月5日 **目的**: CI/CD パイプラインの責任分離と最適化
 
 ## 📋 現在の課題
 
 ### 混在していた責任
+
 - **CI Pipeline**: コード品質チェック
 - **Wiki Sync**: ドキュメント配布
 - **Deploy**: 本番リリース
@@ -17,6 +17,7 @@
 ### 1. CI Pipeline - 品質保証専用
 
 #### トリガー条件
+
 ```yaml
 on:
   push:
@@ -26,6 +27,7 @@ on:
 ```
 
 #### 責任範囲
+
 - ✅ コード品質チェック (ESLint, Prettier)
 - ✅ TypeScript型チェック
 - ✅ ビルド成功確認
@@ -33,17 +35,19 @@ on:
 - ❌ ドキュメント同期（除外）
 
 #### 実行頻度
+
 - 全コード変更時（高頻度）
 - PR作成・更新時
 
 ### 2. Wiki Sync - ドキュメント配布専用
 
 #### トリガー条件
+
 ```yaml
 on:
   push:
     branches: [main, latest]
-    paths: ['docs/development/**']
+    paths: ["docs/development/**"]
   workflow_dispatch:
     inputs:
       force_sync:
@@ -51,18 +55,21 @@ on:
 ```
 
 #### 責任範囲
+
 - ✅ docs/development/ → Wiki 同期
 - ✅ Wiki メタデータ更新
 - ✅ ナビゲーション生成
 - ❌ コード品質チェック（除外）
 
 #### 実行頻度
+
 - ドキュメント変更時のみ（低頻度）
 - 手動実行（force_sync オプション）
 
 ### 3. Deploy - リリース専用
 
 #### トリガー条件
+
 ```yaml
 on:
   release:
@@ -71,27 +78,30 @@ on:
 ```
 
 #### 責任範囲
+
 - ✅ 本番環境デプロイ
 - ✅ リリースノート生成
 - ✅ 成果物配布
 - ❌ 開発中の品質チェック（除外）
 
 #### 実行頻度
+
 - リリース作成時のみ（最低頻度）
 
 ## 📊 最適化の効果
 
 ### リソース使用量
 
-| ワークフロー | 変更前 | 変更後 | 改善 |
-|-------------|--------|--------|------|
-| CI Pipeline | 毎回 Wiki 同期実行 | コード品質のみ | ⚡ 30-50% 高速化 |
-| Wiki Sync | CI と混在 | ドキュメント変更時のみ | 🔄 95% 実行回数削減 |
-| Deploy | - | リリース時のみ | ⏱️ 適切なタイミング |
+| ワークフロー | 変更前             | 変更後                 | 改善                |
+| ------------ | ------------------ | ---------------------- | ------------------- |
+| CI Pipeline  | 毎回 Wiki 同期実行 | コード品質のみ         | ⚡ 30-50% 高速化    |
+| Wiki Sync    | CI と混在          | ドキュメント変更時のみ | 🔄 95% 実行回数削減 |
+| Deploy       | -                  | リリース時のみ         | ⏱️ 適切なタイミング |
 
 ### 開発者体験
 
 #### 以前の問題
+
 ```
 ✅ CI: Code quality passed
 ❌ Wiki: Sync failed (network issue)
@@ -99,6 +109,7 @@ on:
 ```
 
 #### 改善後
+
 ```
 ✅ CI: Code quality passed → PR マージ可能
 ⚠️ Wiki: Sync failed → 別途対処（PR ブロックなし）
@@ -109,23 +120,26 @@ on:
 ### wiki-sync.yml の改善点
 
 #### 1. より明確な命名
+
 ```yaml
 name: Wiki Documentation Sync
 jobs:
-  sync-documentation:  # 具体的な job 名
+  sync-documentation: # 具体的な job 名
 ```
 
 #### 2. 手動実行オプション
+
 ```yaml
 workflow_dispatch:
   inputs:
     force_sync:
-      description: 'Force sync all documentation'
+      description: "Force sync all documentation"
       type: boolean
-      default: 'false'
+      default: "false"
 ```
 
 #### 3. 条件付き実行
+
 ```yaml
 # 強制同期 または docs/development/ 変更時のみ
 if: |
@@ -134,14 +148,16 @@ if: |
 ```
 
 #### 4. エラー処理の改善
+
 ```yaml
 # Wiki 同期失敗でも CI をブロックしない
-continue-on-error: true  # オプション設定可能
+continue-on-error: true # オプション設定可能
 ```
 
 ### CI Pipeline の純化
 
 #### 除外した処理
+
 ```yaml
 # 以下は wiki-sync.yml に移動
 - Wiki repository clone
@@ -150,30 +166,35 @@ continue-on-error: true  # オプション設定可能
 ```
 
 #### 集中する処理
+
 ```yaml
 jobs:
-  setup:    # 環境準備
-  lint:     # コード品質
+  setup: # 環境準備
+  lint: # コード品質
   type-check: # 型安全性
-  build:    # ビルド確認
+  build: # ビルド確認
   security: # 脆弱性検査
 ```
 
 ## 🎯 運用上の利点
 
 ### 1. 障害の局所化
+
 - Wiki 同期の問題が CI をブロックしない
 - 各ワークフローの失敗原因が明確
 
 ### 2. パフォーマンス向上
+
 - CI の実行時間短縮
 - 不要な Wiki 同期処理の削減
 
 ### 3. 保守性向上
+
 - 各ワークフローの責任範囲が明確
 - トラブルシューティングが容易
 
 ### 4. スケーラビリティ
+
 - 新しいワークフロー追加が容易
 - 既存ワークフローへの影響なし
 
@@ -182,16 +203,19 @@ jobs:
 ### 成功指標
 
 #### CI Pipeline
+
 - ✅ 実行時間: 8分 → 5-6分目標
 - ✅ 成功率: 95%以上維持
 - ✅ PR ブロック削減: Wiki関連エラーでのブロック 0件
 
 #### Wiki Sync
+
 - ✅ 同期精度: 100%（全ファイル）
 - ✅ 実行頻度: ドキュメント変更時のみ
 - ✅ 手動実行: force_sync オプション活用
 
 #### Deploy
+
 - ✅ リリース成功率: 100%
 - ✅ デプロイ時間: 安定性重視
 - ✅ ロールバック対応: 緊急時対応
@@ -199,15 +223,17 @@ jobs:
 ## 🔄 今後の拡張
 
 ### 1. 条件付きワークフロー
+
 ```yaml
 # 例: E2E テスト（重いため特定条件のみ）
 on:
   push:
     branches: [main]
-    paths: ['app/**', 'components/**']
+    paths: ["app/**", "components/**"]
 ```
 
 ### 2. 並列実行最適化
+
 ```yaml
 # 独立したワークフローの並列実行
 strategy:
@@ -216,6 +242,7 @@ strategy:
 ```
 
 ### 3. 外部サービス連携
+
 ```yaml
 # 例: Slack 通知、Notion 同期
 - name: Notify deployment
@@ -249,16 +276,19 @@ strategy:
 ## 🎓 学習価値
 
 ### DevOps スキル
+
 - CI/CD パイプライン設計
 - ワークフロー最適化
 - リソース効率化
 
 ### GitHub Actions 理解
+
 - 複数ワークフローの協調
 - 条件付き実行
 - 手動トリガー活用
 
 ### 運用設計
+
 - 責任分離の原則
 - 障害の局所化
 - パフォーマンス監視

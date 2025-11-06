@@ -3,13 +3,13 @@ name: Wiki Documentation Sync
 on:
   push:
     paths:
-      - 'docs/development/**'
+      - "docs/development/**"
   workflow_dispatch:
     inputs:
       force_sync:
-        description: 'Force update all documentation'
+        description: "Force update all documentation"
         required: false
-        default: 'false'
+        default: "false"
         type: boolean
 
 concurrency:
@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   update:
-    if: github.actor != 'github-actions[bot]'  # 自己トリガー回避（任意）
+    if: github.actor != 'github-actions[bot]' # 自己トリガー回避（任意）
     name: Update docs to Wiki
     runs-on: ubuntu-latest
 
@@ -40,7 +40,7 @@ jobs:
 
       - name: Clone wiki repository
         env:
-          WIKI_PAT: ${{ secrets.WIKI_PAT }}   # 事前に作成した PAT (repo スコープ)
+          WIKI_PAT: ${{ secrets.WIKI_PAT }} # 事前に作成した PAT (repo スコープ)
         run: |
           git clone https://x-access-token:${WIKI_PAT}@github.com/${{ github.repository }}.wiki.git wiki
 
