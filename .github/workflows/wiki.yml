@@ -2,8 +2,8 @@ name: Wiki Documentation Sync
 
 on:
   push:
-    paths:
-      - "docs/development/**"
+  paths:
+    - "docs/development/**"
   workflow_dispatch:
     inputs:
       force_sync:
