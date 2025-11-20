@@ -1,4 +1,4 @@
-name: CI - Final Check
+name: CI Check
 
 on:
   push:
@@ -9,29 +9,29 @@ on:
 
 jobs:
   setup:
-    uses: ./.github/workflows/ci/ci-setup.yml
+    uses: ./.github/workflows/ci-setup.yml
 
   lint:
     needs: setup
-    uses: ./.github/workflows/ci/ci-lint.yml
+    uses: ./.github/workflows/ci-lint.yml
     with:
       cache-key: ${{ needs.setup.outputs.cache-key }}
 
   type-check:
     needs: setup
-    uses: ./.github/workflows/ci/ci-type-check.yml
+    uses: ./.github/workflows/ci-type-check.yml
     with:
       cache-key: ${{ needs.setup.outputs.cache-key }}
 
   build:
     needs: [lint, type-check]
-    uses: ./.github/workflows/ci/ci-build.yml
+    uses: ./.github/workflows/ci-build.yml
     with:
       cache-key: ${{ needs.setup.outputs.cache-key }}
 
   security:
     needs: build
-    uses: ./.github/workflows/ci/ci-security.yml
+    uses: ./.github/workflows/ci-security.yml
     with:
       cache-key: ${{ needs.setup.outputs.cache-key }}
 
