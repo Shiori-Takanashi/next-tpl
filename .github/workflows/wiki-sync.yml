@@ -1,6 +1,10 @@
 name: Wiki Debug
 
 on:
+  push:
+    branches: [main, latest]
+  pull_request:
+    branches: [main, latest]
   workflow_dispatch:
 
 jobs:
