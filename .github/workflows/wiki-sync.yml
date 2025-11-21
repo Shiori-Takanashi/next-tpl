@@ -7,47 +7,43 @@ on:
       - latest
   workflow_dispatch:
 
-concurrency:
-  group: wiki-update
-  cancel-in-progress: true
-
 jobs:
-  update:
+  sync:
     runs-on: ubuntu-latest
     if: github.actor != 'github-actions[bot]'
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
       - name: Configure git user
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Clone Wiki repository
+      - name: Clone Wiki repo
         env:
-          WIKI_PAT: ${{ secrets.WIKI_PAT }}
+          TOKEN: ${{ secrets.WIKI_PAT }}
         run: |
-          git clone "https://x-access-token:${WIKI_PAT}@github.com/${{ github.repository }}.wiki.git" wiki
+          git clone "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.wiki.git" wiki
+
+      - name: Debug remote
+        run: |
           cd wiki
-          git remote set-url origin "https://x-access-token:${WIKI_PAT}@github.com/${{ github.repository }}.wiki.git"
+          git remote -v
 
       - name: Sync docs to wiki
         run: |
           rsync -av --delete docs/ wiki/
 
-      - name: Commit and push if changed
+      - name: Commit and push
         env:
-          WIKI_PAT: ${{ secrets.WIKI_PAT }}
+          TOKEN: ${{ secrets.WIKI_PAT }}
         run: |
           cd wiki
           if [ -n "$(git status --porcelain)" ]; then
             git add -A
-            git commit -m "Auto sync wiki from repo (${GITHUB_SHA})"
-            git push origin HEAD
+            git commit -m "sync"
+            git push
           else
-            echo "No changes to commit."
+            echo "no changes"
           fi
