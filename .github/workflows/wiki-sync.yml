@@ -28,7 +28,7 @@ jobs:
 
       - name: Clone Wiki repository
         env:
-          WIKI_PAT: ${{ secrets.WIKI_SYNC_PAT }}
+          WIKI_PAT: ${{ secrets.WIKI_PAT }}
         run: |
           git clone "https://x-access-token:${WIKI_PAT}@github.com/${{ github.repository }}.wiki.git" wiki
           cd wiki
