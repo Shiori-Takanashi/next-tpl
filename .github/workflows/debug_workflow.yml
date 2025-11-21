@@ -1,8 +1,0 @@
-name: DEBUG - WORKFLOW
-on: [push]
-
-jobs:
-  check:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "GitHub Actions are enabled and this workflow ran"
