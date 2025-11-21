@@ -2,15 +2,9 @@ name: Wiki Documentation Sync
 
 on:
   push:
-  paths:
-    - "docs/*.md"
+    paths:
+      - "docs/**/*.md"
   workflow_dispatch:
-    inputs:
-      force_sync:
-        description: "Force update all documentation"
-        required: false
-        default: "false"
-        type: boolean
 
 concurrency:
   group: wiki-update
@@ -18,37 +12,33 @@ concurrency:
 
 jobs:
   update:
-    if: github.actor != 'github-actions[bot]' # 自己トリガー回避（任意）
-    name: Update docs to Wiki
     runs-on: ubuntu-latest
+    if: github.actor != 'github-actions[bot]'
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup Git with proper authentication
+      - name: Configure git user
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Configure git user
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-      - name: Clone wiki repository
+      - name: Clone Wiki repository
         env:
-          WIKI_PAT: ${{ secrets.WIKI_PAT }} # 事前に作成した PAT (repo スコープ)
+          WIKI_PAT: ${{ secrets.WIKI_PAT }}
         run: |
-          git clone https://x-access-token:${WIKI_PAT}@github.com/${{ github.repository }}.wiki.git wiki
+          git clone \
+            https://x-access-token:${WIKI_PAT}@github.com/${{ github.repository }}.wiki.git \
+            wiki
 
-      - name: Copy markdown into wiki
+      - name: Sync docs → wiki
         run: |
-          rsync -av --delete wiki-src/ wiki/   # wiki-src に md を置いておく想定
+          rsync -av --delete docs/ wiki/
 
-      - name: Commit & push if changes
+      - name: Commit & push if changed
         run: |
           cd wiki
           if [ -n "$(git status --porcelain)" ]; then
@@ -56,20 +46,5 @@ jobs:
             git commit -m "Auto sync wiki from repo (${GITHUB_SHA})"
             git push origin HEAD
           else
-            echo "No changes to commit"
-          fi
-
-      - name: Copy markdown into wiki
-        run: |
-          rsync -av --delete docs/development/ wiki/   # wiki-src に md を置いておく想定
-
-      - name: Commit & push if changes
-        run: |
-          cd wiki
-          if [ -n "$(git status --porcelain)" ]; then
-            git add -A
-            git commit -m "Auto sync wiki from repo (${GITHUB_SHA})"
-            git push origin HEAD
-          else
-            echo "No changes to commit"
+            echo "No changes to commit."
           fi
