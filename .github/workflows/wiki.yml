@@ -3,7 +3,7 @@ name: Wiki Documentation Sync
 on:
   push:
   paths:
-    - "docs/**"
+    - "docs/*.md"
   workflow_dispatch:
     inputs:
       force_sync:
