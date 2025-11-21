@@ -1,4 +1,4 @@
-name: Debug_Workflow
+name: DEBUG - WORKFLOW
 on: [push]
 
 jobs:
