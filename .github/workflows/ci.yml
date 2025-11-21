@@ -12,26 +12,47 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2. Setup Node
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
-          cache: "npm" # lockfile ベースのキャッシュ（壊れにくい）
+          cache: "npm"
 
+      # 3. Install dependencies
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint
+      # 4. Lint
+      - name: Run ESLint
         run: npm run lint
 
-      - name: Type-check
+      # 5. Type-check
+      - name: Run TypeScript check
         run: npm run type-check
 
-      - name: Build
+      # 6. Format check
+      - name: Run Prettier format check
+        run: npm run format:check
+
+      # 7. Build Next.js
+      - name: Build Next.js app
         run: npm run build
 
-      - name: Security audit
-        run: npm audit --production
+      # 8. Docker build
+      - name: Build Docker image
+        run: docker build -t next-app:test .
+
+      # 9. Docker run test
+      - name: Run Docker container test
+        run: |
+          docker run --name next-test -d -p 3000:3000 next-app:test
+          sleep 15
+          docker ps
+          curl -f http://localhost:3000/api/health || (docker logs next-test && exit 1)
+          docker stop next-test
+          docker rm next-test

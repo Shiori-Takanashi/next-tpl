@@ -1,17 +1,13 @@
-# Node.js LTS版を使用（開発用）
-FROM node:22.11.0-alpine
-
-# 作業ディレクトリを設定
+FROM node:22.11.0-alpine AS dev
 WORKDIR /app
 
-# package.jsonとpackage-lock.jsonをコピー
+# Install deps（dev・prod 含む）
 COPY package*.json ./
+RUN npm install
 
-# すべての依存関係をインストール（devDependencies含む）
-RUN npm ci
+# Copy everything for dev
+COPY . .
 
-# ポート3000を公開
 EXPOSE 3000
 
-# 開発サーバーを起動
 CMD ["npm", "run", "dev"]
