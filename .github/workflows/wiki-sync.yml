@@ -2,8 +2,9 @@ name: Wiki Documentation Sync
 
 on:
   push:
-    paths:
-      - "docs/*.md"
+    branches:
+      - main
+      - latest
   workflow_dispatch:
 
 concurrency:
