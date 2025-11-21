@@ -13,71 +13,40 @@ jobs:
     if: github.actor != 'github-actions[bot]'
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
-      # ----------------------------------------
-      # 1. Secret が読み取れているかチェック
-      # ----------------------------------------
-      - name: Debug PAT presence
-        env:
-          TOKEN: ${{ secrets.WIKI_PAT }}
-        run: |
-          if [ -z "$TOKEN" ]; then
-            echo "ERROR: WIKI_PAT is EMPTY"
-            exit 1
-          else
-            echo "WIKI_PAT is SET (length: ${#TOKEN})"
-          fi
-
-      # ----------------------------------------
-      # 2. Git user 設定
-      # ----------------------------------------
       - name: Configure git user
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      # ----------------------------------------
-      # 3. Wiki リポジトリ clone
-      # ----------------------------------------
       - name: Clone Wiki repo
         env:
           TOKEN: ${{ secrets.WIKI_PAT }}
         run: |
-          set -e
-          echo "Cloning wiki repository..."
           git clone "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.wiki.git" wiki
 
-      # ----------------------------------------
-      # 4. Clone 成功確認
-      # ----------------------------------------
-      - name: Debug remote after clone
+      - name: Fix remote URL
+        env:
+          TOKEN: ${{ secrets.WIKI_PAT }}
         run: |
           cd wiki
+          git remote set-url origin "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.wiki.git"
           git remote -v
 
-      # ----------------------------------------
-      # 5. docs → wiki へ完全同期
-      # ----------------------------------------
       - name: Sync docs to wiki
         run: |
           rsync -av --delete docs/ wiki/
 
-      # ----------------------------------------
-      # 6. 変更があれば push
-      # ----------------------------------------
-      - name: Commit and push changes
+      - name: Commit and push if changed
         env:
           TOKEN: ${{ secrets.WIKI_PAT }}
         run: |
           cd wiki
           if [ -n "$(git status --porcelain)" ]; then
             git add -A
-            git commit -m "Auto sync from docs (${GITHUB_SHA})"
+            git commit -m "sync"
             git push origin HEAD
           else
-            echo "No changes to commit."
+            echo "No changes"
           fi
