@@ -1,52 +1,77 @@
-name: Wiki Documentation Sync
+name: Wiki Debug
 
 on:
-  push:
-    branches:
-      - main
-      - latest
   workflow_dispatch:
 
 jobs:
-  sync:
+  debug:
     runs-on: ubuntu-latest
-    if: github.actor != 'github-actions[bot]'
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Configure git user
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Clone Wiki repo
+      # 1. Secret が空かどうか確認
+      - name: Debug Secret
         env:
           TOKEN: ${{ secrets.WIKI_PAT }}
         run: |
-          git clone "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.wiki.git" wiki
-
-      - name: Fix remote URL
-        env:
-          TOKEN: ${{ secrets.WIKI_PAT }}
-        run: |
-          cd wiki
-          git remote set-url origin "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.wiki.git"
-          git remote -v
-
-      - name: Sync docs to wiki
-        run: |
-          rsync -av --delete docs/ wiki/
-
-      - name: Commit and push if changed
-        env:
-          TOKEN: ${{ secrets.WIKI_PAT }}
-        run: |
-          cd wiki
-          if [ -n "$(git status --porcelain)" ]; then
-            git add -A
-            git commit -m "sync"
-            git push origin HEAD
+          echo "=== SECRET CHECK ==="
+          if [ -z "$TOKEN" ]; then
+            echo "WIKI_PAT is EMPTY"
           else
-            echo "No changes"
+            echo "WIKI_PAT LENGTH: ${#TOKEN}"
+            echo "WIKI_PAT FIRST 5 CHARS: ${TOKEN:0:5}"
           fi
+          echo
+
+      # 2. wiki clone を実行
+      - name: Clone wiki
+        env:
+          TOKEN: ${{ secrets.WIKI_PAT }}
+        run: |
+          echo "=== CLONE START ==="
+          git clone "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.wiki.git" wiki || echo "CLONE FAILED"
+          echo
+
+      # 3. clone の成否と構造チェック
+      - name: Check wiki directory exists
+        run: |
+          echo "=== WIKI DIRECTORY CHECK ==="
+          if [ -d "wiki" ]; then
+            echo "wiki directory EXISTS"
+          else
+            echo "wiki directory DOES NOT EXIST"
+          fi
+          echo
+
+      # 4. remote の正しい URL を確認
+      - name: Debug remote
+        run: |
+          echo "=== REMOTE URL CHECK ==="
+          if [ -d "wiki/.git" ]; then
+            cd wiki
+            git remote -v
+          else
+            echo "wiki/.git does not exist"
+          fi
+          echo
+
+      # 5. 現在の push 先 URL が wiki なのか本体なのか出力
+      - name: Extract push URL
+        run: |
+          echo "=== PUSH TARGET CHECK ==="
+          if [ -d "wiki/.git" ]; then
+            cd wiki
+            URL=$(git remote get-url origin)
+            echo "Origin URL: $URL"
+
+            if echo "$URL" | grep -q ".wiki.git"; then
+              echo "PUSH TARGET = WIKI ✔"
+            else
+              echo "PUSH TARGET = MAIN REPO ✘ (403 の原因)"
+            fi
+          else
+            echo "Cannot check push URL (no wiki clone)"
+          fi
+          echo
