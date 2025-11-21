@@ -30,15 +30,17 @@ jobs:
         env:
           WIKI_PAT: ${{ secrets.WIKI_PAT }}
         run: |
-          git clone \
-            https://x-access-token:${WIKI_PAT}@github.com/${{ github.repository }}.wiki.git \
-            wiki
+          git clone "https://x-access-token:${WIKI_PAT}@github.com/${{ github.repository }}.wiki.git" wiki
+          cd wiki
+          git remote set-url origin "https://x-access-token:${WIKI_PAT}@github.com/${{ github.repository }}.wiki.git"
 
-      - name: Sync docs → wiki
+      - name: Sync docs to wiki
         run: |
           rsync -av --delete docs/ wiki/
 
-      - name: Commit & push if changed
+      - name: Commit and push if changed
+        env:
+          WIKI_PAT: ${{ secrets.WIKI_PAT }}
         run: |
           cd wiki
           if [ -n "$(git status --porcelain)" ]; then
