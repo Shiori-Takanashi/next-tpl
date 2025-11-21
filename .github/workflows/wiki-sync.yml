@@ -15,6 +15,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Debug origin
+        run: |
+          cd wiki
+          git remote -v
+
       - name: Configure git user
         run: |
           git config --global user.name "github-actions[bot]"
