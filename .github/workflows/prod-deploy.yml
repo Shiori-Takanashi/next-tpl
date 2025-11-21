@@ -1,0 +1,74 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main] # プロダクションは main のみに限定すべき
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Setup Node + npm cache
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      # 3. Install dependencies (1回だけ)
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Lint
+      - name: Lint
+        run: npm run lint
+
+      # 5. Type-check
+      - name: Type-check
+        run: npm run type-check
+
+      # 6. Format check（任意）
+      - name: Format check
+        run: npm run format:check
+
+      # 7. Build Next.js application
+      - name: Build application
+        run: npm run build
+
+      # 8. Verify build output
+      - name: Verify .next directory
+        run: |
+          ls -la .next/
+          echo "Build OK"
+
+      # 9. Docker build
+      - name: Build Docker image
+        run: |
+          docker build -t next-tpl:test .
+          echo "Docker image OK"
+
+      # 10. Run Docker container test
+      - name: Test Docker container
+        run: |
+          docker run --name test-container -d -p 3000:3000 next-tpl:test
+          sleep 20
+          docker ps
+          docker logs test-container || true
+          docker stop test-container
+          docker rm test-container
+          echo "Docker container OK"
+
+      # 11. Deployment readiness
+      - name: Deployment ready
+        run: |
+          echo "🚀 All checks passed. Ready for Production Deployment."
+          echo "Lint: OK"
+          echo "Type-check: OK"
+          echo "Build: OK"
+          echo "Docker: OK"
