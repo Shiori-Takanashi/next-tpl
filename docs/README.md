@@ -71,6 +71,13 @@
 - [27-github-actions-workflow-separation.md](./27-github-actions-workflow-separation.md) -
   GitHub Actions ワークフロー責任分離設計
 
+### 品質保証・ワークフロー最適化
+
+- [28-git-hooks-automation.md](./28-git-hooks-automation.md) - Git
+  Hooks自動化とコード品質強制（Husky + lint-staged）
+- [29-ci-workflow-consolidation.md](./29-ci-workflow-consolidation.md) -
+  CIワークフロー統合とシンプル化
+
 ## 🎯 開発ガイド
 
 ### テンプレートのカスタマイズ
@@ -301,6 +308,9 @@ docs/tpl/
 | 2025-11-04 | 25-development-standards.md 追加（開発環境標準化：EditorConfig/Prettier等） |
 | 2025-11-04 | 20-production-deployment.md 更新（環境変数管理の詳細セクション追加）        |
 | 2025-11-05 | 26-github-wiki-migration-strategy.md 追加（Wiki移行戦略）                   |
+| 2025-11-05 | 27-github-actions-workflow-separation.md 追加（ワークフロー責任分離）       |
+| 2025-11-22 | 28-git-hooks-automation.md 追加（Git Hooks自動化：Husky/lint-staged）       |
+| 2025-11-22 | 29-ci-workflow-consolidation.md 追加（CIワークフロー統合・最適化）          |
 
 ---
 
