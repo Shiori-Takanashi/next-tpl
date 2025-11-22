@@ -1,55 +1,27 @@
-name: Wiki Documentation Sync
-
+# GitHub Actions workflow to sync docs/ => repository Wiki
+# Triggers on pushes that change docs/
+name: Sync docs to Wiki
 on:
   push:
-    branches:
-      - main
-      - latest
+    branches: [main, latest]
     paths:
-      - "docs/**" # docs 以下が変わったら毎回同期（手動なら workflow_dispatch を使う）
-  workflow_dispatch:
+      - "docs/**"
+      - ".github/workflows/wiki-sync.yml"
 
 permissions:
-  contents: write # GITHUB_TOKEN で wiki に push できるようにする
+  contents: write
 
 jobs:
-  sync:
+  publish-wiki:
     runs-on: ubuntu-latest
-    if: github.actor != 'github-actions[bot]'
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 1. 既存の Wiki を Home.md 保存のためだけに clone（失敗しても無視）
-      - name: Clone current wiki (for Home.md)
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -eux
-
-          rm -rf wiki-current wiki-src
-
-          # 既存 wiki を clone（まだ無ければ失敗するのでその場合は握りつぶす）
-          git clone "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.wiki.git" wiki-current || echo "no existing wiki"
-
-          mkdir -p wiki-src
-
-          # docs の内容をすべて staging にコピー（毎回必ず実行する）
-          cp -R docs/. wiki-src/
-
-          # 既存 wiki にだけ Home.md があって docs 側に無い場合は、Home.md を引き継ぐ
-          if [ -f wiki-current/Home.md ] && [ ! -f wiki-src/Home.md ]; then
-            cp wiki-current/Home.md wiki-src/Home.md
-          fi
-
-      # 2. joeizzard/action-wiki-sync で wiki-src → GitHub Wiki を毎回同期
-      - name: Sync to GitHub Wiki
-        uses: joeizzard/action-wiki-sync@master
+      - name: Sync docs/ to Wiki
+        uses: Andrew-Chen-Wang/github-wiki-action@v4
         with:
-          username: ${{ github.repository_owner }}
-          access_token: ${{ secrets.GITHUB_TOKEN }}
-          wiki_folder: wiki-src
-          commit_username: github-actions[bot]
-          commit_email: github-actions[bot]@users.noreply.github.com
-          commit_message: "Auto sync from docs (${GITHUB_SHA})"
+          path: "docs"
+          # Use a Personal Access Token stored as repository secret WIKI_PAT (see notes below)
+          token: ${{ secrets.WIKI_PAT }}
+          commit-message: "chore(wiki): update from docs"
