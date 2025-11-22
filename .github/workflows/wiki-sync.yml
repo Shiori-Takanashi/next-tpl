@@ -2,9 +2,7 @@ name: Wiki Documentation Sync
 
 on:
   push:
-    branches:
-      - main
-      - latest
+    branches: [main, latest]
   workflow_dispatch:
 
 jobs:
@@ -13,46 +11,40 @@ jobs:
     if: github.actor != 'github-actions[bot]'
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Configure git user
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      # --- Clone wiki repo ---
       - name: Clone wiki
         env:
           TOKEN: ${{ secrets.WIKI_PAT }}
         run: |
           git clone "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.wiki.git" wiki
 
-      # --- Force correct remote URL ---
-      - name: Fix remote URL
+      # --- Home.md を残したまま docs を強制同期 ---
+      - name: Force sync docs → wiki (preserve Home.md)
+        run: |
+          mkdir -p wiki
+          # Home.md はそのまま維持
+          # docs の内容を全て上書き（--ignore-times により差分無視して反映）
+          rsync -av \
+            --ignore-times \
+            --delete \
+            --exclude "Home.md" \
+            docs/ wiki/
+
+      - name: Commit & push
         env:
           TOKEN: ${{ secrets.WIKI_PAT }}
         run: |
           cd wiki
-          git remote set-url origin "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.wiki.git"
-          git remote -v
-
-      # --- Sync docs → wiki ---
-      - name: Sync docs to wiki
-        run: |
-          rsync -av --delete docs/ wiki/
-
-      # --- Commit & push ---
-      - name: Commit & push if changed
-        env:
-          TOKEN: ${{ secrets.WIKI_PAT }}
-        run: |
-          cd wiki
-          if [ -n "$(git_status=$(git status --porcelain))" ]; then
-            echo "Changes detected, committing..."
+          if [ -n "$(git status --porcelain)" ]; then
             git add -A
-            git commit -m "Auto sync from docs (${GITHUB_SHA})"
+            git commit -m "Force sync from docs (${GITHUB_SHA})"
             git push origin HEAD
           else
-            echo "No changes to commit."
+            echo "No changes detected."
           fi
