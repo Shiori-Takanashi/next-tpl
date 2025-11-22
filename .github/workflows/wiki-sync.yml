@@ -2,8 +2,15 @@ name: Wiki Documentation Sync
 
 on:
   push:
-    branches: [main, latest]
+    branches:
+      - main
+      - latest
+    paths:
+      - "docs/**" # docs 以下が変わったら毎回同期（手動なら workflow_dispatch を使う）
   workflow_dispatch:
+
+permissions:
+  contents: write # GITHUB_TOKEN で wiki に push できるようにする
 
 jobs:
   sync:
@@ -11,40 +18,38 @@ jobs:
     if: github.actor != 'github-actions[bot]'
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Configure git user
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Clone wiki
+      # 1. 既存の Wiki を Home.md 保存のためだけに clone（失敗しても無視）
+      - name: Clone current wiki (for Home.md)
         env:
-          TOKEN: ${{ secrets.WIKI_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git clone "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.wiki.git" wiki
+          set -eux
 
-      # --- Home.md を残したまま docs を強制同期 ---
-      - name: Force sync docs → wiki (preserve Home.md)
-        run: |
-          mkdir -p wiki
-          # Home.md はそのまま維持
-          # docs の内容を全て上書き（--ignore-times により差分無視して反映）
-          rsync -av \
-            --ignore-times \
-            --delete \
-            --exclude "Home.md" \
-            docs/ wiki/
+          rm -rf wiki-current wiki-src
 
-      - name: Commit & push
-        env:
-          TOKEN: ${{ secrets.WIKI_PAT }}
-        run: |
-          cd wiki
-          if [ -n "$(git status --porcelain)" ]; then
-            git add -A
-            git commit -m "Force sync from docs (${GITHUB_SHA})"
-            git push origin HEAD
-          else
-            echo "No changes detected."
+          # 既存 wiki を clone（まだ無ければ失敗するのでその場合は握りつぶす）
+          git clone "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.wiki.git" wiki-current || echo "no existing wiki"
+
+          mkdir -p wiki-src
+
+          # docs の内容をすべて staging にコピー（毎回必ず実行する）
+          cp -R docs/. wiki-src/
+
+          # 既存 wiki にだけ Home.md があって docs 側に無い場合は、Home.md を引き継ぐ
+          if [ -f wiki-current/Home.md ] && [ ! -f wiki-src/Home.md ]; then
+            cp wiki-current/Home.md wiki-src/Home.md
           fi
+
+      # 2. joeizzard/action-wiki-sync で wiki-src → GitHub Wiki を毎回同期
+      - name: Sync to GitHub Wiki
+        uses: joeizzard/action-wiki-sync@master
+        with:
+          username: ${{ github.repository_owner }}
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+          wiki_folder: wiki-src
+          commit_username: github-actions[bot]
+          commit_email: github-actions[bot]@users.noreply.github.com
+          commit_message: "Auto sync from docs (${GITHUB_SHA})"
